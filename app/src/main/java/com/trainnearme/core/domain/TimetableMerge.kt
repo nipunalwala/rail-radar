@@ -44,6 +44,8 @@ private fun ScheduledDeparture.toDeparture(at: Instant) = Departure(
     trainType = trainType,
     status = DepartureStatus.SCHEDULED,
     isLive = false,
+    originCode = originCode,
+    originName = originName,
 )
 
 /**

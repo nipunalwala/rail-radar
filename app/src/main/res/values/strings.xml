@@ -52,7 +52,15 @@
     <string name="board_now">Now</string>
     <string name="board_minutes">%1$d min</string>
     <string name="board_platform">PF %1$s</string>
-    <string name="board_late">+%1$d late</string>
+    <string name="board_late">+%1$s late</string>
+    <string name="board_route">%1$s – %2$s</string>
+    <string name="train_at_station">At the platform</string>
+    <string name="train_upcoming">On its way here</string>
+    <string name="train_not_started">Not started from %1$s yet</string>
+    <string name="train_not_started_unknown">Not started yet</string>
+    <string name="train_departed">Just left</string>
+    <string name="train_running">Running</string>
+    <string name="train_no_live">No live position</string>
     <string name="board_on_time">On time</string>
     <string name="board_scheduled">Scheduled</string>
 

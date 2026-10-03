@@ -27,6 +27,7 @@ data class LiveTrainDto(
     val number: String,
     val name: String = "",
     val type: String = "",
+    val source: String? = null,
     val destination: String? = null,
 )
 
@@ -61,6 +62,7 @@ data class TimetableTrainDto(
     val number: String,
     val name: String = "",
     val type: String = "",
+    val source: StationRefDto? = null,
     val destination: StationRefDto? = null,
     val runDays: List<String> = emptyList(),
 )

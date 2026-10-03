@@ -24,6 +24,8 @@ data class TimetableEntryEntity(
     /** Bit 0 is Monday, bit 6 is Sunday. */
     val runDays: Int,
     val trainType: String,
+    val originCode: String = "",
+    val originName: String = "",
 )
 
 /** One row per provider code whose timetable has been fetched, even if it was empty. */
@@ -73,6 +75,8 @@ fun ScheduledDeparture.toEntity(providerCode: String) = TimetableEntryEntity(
     dayOffset = dayOffset,
     runDays = runDays.fold(0) { mask, day -> mask or (1 shl (day.value - 1)) },
     trainType = trainType.name,
+    originCode = originCode,
+    originName = originName,
 )
 
 fun TimetableEntryEntity.toScheduledDeparture() = ScheduledDeparture(
@@ -84,4 +88,6 @@ fun TimetableEntryEntity.toScheduledDeparture() = ScheduledDeparture(
     dayOffset = dayOffset,
     runDays = DayOfWeek.entries.filter { runDays and (1 shl (it.value - 1)) != 0 }.toSet(),
     trainType = TrainType.valueOf(trainType),
+    originCode = originCode,
+    originName = originName,
 )

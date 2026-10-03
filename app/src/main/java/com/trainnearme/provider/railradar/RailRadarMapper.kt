@@ -27,6 +27,7 @@ internal fun LiveEntryDto.toDeparture(): Departure? {
     val status = live?.type.toStatus()
     val isLive = live != null && status != DepartureStatus.SCHEDULED
     val destinationCode = train.destination.orEmpty()
+    val originCode = train.source.orEmpty()
     return Departure(
         trainNumber = train.number,
         trainName = train.name,
@@ -40,6 +41,9 @@ internal fun LiveEntryDto.toDeparture(): Departure? {
         trainType = train.type.toTrainType(),
         status = status,
         isLive = isLive,
+        originCode = originCode,
+        // As for the destination: only a code is given here.
+        originName = originCode,
     )
 }
 
@@ -54,6 +58,8 @@ internal fun TimetableEntryDto.toScheduledDeparture(): ScheduledDeparture? {
         dayOffset = ((stop.departureDay ?: 1) - 1).coerceAtLeast(0),
         runDays = train.runDays.mapNotNull { DAYS[it.lowercase()] }.toSet(),
         trainType = train.type.toTrainType(),
+        originCode = train.source?.code.orEmpty(),
+        originName = train.source?.name.orEmpty(),
     )
 }
 

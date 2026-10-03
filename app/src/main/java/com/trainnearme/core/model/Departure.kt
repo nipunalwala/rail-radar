@@ -21,6 +21,9 @@ data class Departure(
     val trainType: TrainType,
     val status: DepartureStatus,
     val isLive: Boolean,
+    /** Where the train starts its run. Blank when the provider does not say. */
+    val originCode: String = "",
+    val originName: String = "",
 )
 
 /** A timetable entry for a station. Cacheable for days. */
@@ -35,4 +38,7 @@ data class ScheduledDeparture(
     /** Days on which the train starts its run. */
     val runDays: Set<DayOfWeek>,
     val trainType: TrainType,
+    /** Where the train starts its run. Blank when the provider does not say. */
+    val originCode: String = "",
+    val originName: String = "",
 )

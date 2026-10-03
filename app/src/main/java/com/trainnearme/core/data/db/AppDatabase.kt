@@ -8,11 +8,12 @@ import com.trainnearme.core.data.timetable.TimetableDao
 import com.trainnearme.core.data.timetable.TimetableEntryEntity
 import com.trainnearme.core.data.timetable.TimetableMetaEntity
 
-// Bump the version when stations.json changes; the destructive migration
-// empties the table and the asset is imported again on next use.
+// Bump the version when stations.json or a table changes; the destructive
+// migration empties the tables, the asset is imported again on next use and
+// timetables are fetched again when their station is next shown.
 @Database(
     entities = [StationEntity::class, TimetableEntryEntity::class, TimetableMetaEntity::class],
-    version = 3,
+    version = 4,
     exportSchema = false,
 )
 abstract class AppDatabase : RoomDatabase() {

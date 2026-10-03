@@ -32,9 +32,11 @@ import com.trainnearme.R
 import com.trainnearme.core.data.DepartureRepository
 import com.trainnearme.core.domain.MUMBAI_ZONE
 import com.trainnearme.core.domain.effectiveTime
+import com.trainnearme.core.domain.formatDelay
 import com.trainnearme.core.model.BoardSource
 import com.trainnearme.core.model.Departure
 import com.trainnearme.core.model.DepartureBoard
+import com.trainnearme.core.model.DepartureStatus
 import com.trainnearme.core.model.Line
 import com.trainnearme.ui.theme.statusColors
 import kotlinx.coroutines.CancellationException
@@ -152,11 +154,15 @@ private fun PlaceholderRow() {
     }
 }
 
+/**
+ * One train. Left, top to bottom: where the train is now, its route from start
+ * to end, then platform and delay. Right: minutes until it leaves, and the time.
+ */
 @Composable
 private fun DepartureRow(departure: Departure, now: Instant) {
     val leavesAt = departure.effectiveTime(now)
     val minutes = Duration.between(now, leavesAt).toMinutes().coerceAtLeast(0)
-    val (status, statusColor) = delayLabel(departure)
+    val delay = delayLabel(departure)
 
     BoardCard {
         Row(
@@ -165,19 +171,36 @@ private fun DepartureRow(departure: Departure, now: Instant) {
         ) {
             Column(Modifier.weight(1f).padding(end = 12.dp)) {
                 Text(
-                    departure.destinationName,
+                    whereLabel(departure),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold,
+                    color = if (departure.status == DepartureStatus.AT_STATION) {
+                        MaterialTheme.colorScheme.primary
+                    } else {
+                        MaterialTheme.colorScheme.onSurface
+                    },
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
-                Row(
-                    Modifier.padding(top = 6.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                ) {
-                    departure.platform?.let { PlatformBadge(stringResource(R.string.board_platform, it)) }
-                    Text(status, style = MaterialTheme.typography.bodyMedium, color = statusColor)
+                Text(
+                    routeLabel(departure),
+                    Modifier.padding(top = 2.dp),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                if (departure.platform != null || delay != null) {
+                    Row(
+                        Modifier.padding(top = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    ) {
+                        departure.platform?.let { PlatformBadge(stringResource(R.string.board_platform, it)) }
+                        delay?.let { (text, color) ->
+                            Text(text, style = MaterialTheme.typography.bodyMedium, color = color)
+                        }
+                    }
                 }
             }
             Column(horizontalAlignment = Alignment.End) {
@@ -197,14 +220,48 @@ private fun DepartureRow(departure: Departure, now: Instant) {
     }
 }
 
+/**
+ * Where the train is now, as far as the station board says: it reports a
+ * stage (not started, on its way, at the platform), not a position.
+ */
 @Composable
-private fun delayLabel(departure: Departure): Pair<String, Color> {
+private fun whereLabel(departure: Departure): String =
+    if (!departure.isLive) {
+        stringResource(R.string.train_no_live)
+    } else {
+        when (departure.status) {
+            DepartureStatus.AT_STATION -> stringResource(R.string.train_at_station)
+            DepartureStatus.UPCOMING -> stringResource(R.string.train_upcoming)
+            DepartureStatus.NOT_STARTED ->
+                if (departure.originName.isNotBlank()) {
+                    stringResource(R.string.train_not_started, departure.originName)
+                } else {
+                    stringResource(R.string.train_not_started_unknown)
+                }
+            DepartureStatus.DEPARTED -> stringResource(R.string.train_departed)
+            DepartureStatus.SCHEDULED, DepartureStatus.UNKNOWN -> stringResource(R.string.train_running)
+        }
+    }
+
+/** "Start – End", or only the end when the start is not known. */
+@Composable
+private fun routeLabel(departure: Departure): String =
+    if (departure.originName.isNotBlank()) {
+        stringResource(R.string.board_route, departure.originName, departure.destinationName)
+    } else {
+        departure.destinationName
+    }
+
+/** Null when there is no live delay to report. */
+@Composable
+private fun delayLabel(departure: Departure): Pair<String, Color>? {
     val delay = departure.delayMinutes
     return when {
-        !departure.isLive || delay == null ->
-            stringResource(R.string.board_scheduled) to MaterialTheme.colorScheme.onSurfaceVariant
-        delay >= LATE_MINUTES -> stringResource(R.string.board_late, delay) to MaterialTheme.statusColors.late
-        delay > 0 -> stringResource(R.string.board_late, delay) to MaterialTheme.statusColors.slightlyLate
+        !departure.isLive || delay == null -> null
+        delay >= LATE_MINUTES ->
+            stringResource(R.string.board_late, formatDelay(delay)) to MaterialTheme.statusColors.late
+        delay > 0 ->
+            stringResource(R.string.board_late, formatDelay(delay)) to MaterialTheme.statusColors.slightlyLate
         else -> stringResource(R.string.board_on_time) to MaterialTheme.statusColors.onTime
     }
 }

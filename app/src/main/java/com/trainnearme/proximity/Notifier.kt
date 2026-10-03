@@ -12,6 +12,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.trainnearme.MainActivity
 import com.trainnearme.R
+import com.trainnearme.core.domain.formatDelay
 import com.trainnearme.core.domain.AlertLine
 import com.trainnearme.core.domain.alertLines
 import com.trainnearme.core.model.BoardSource
@@ -111,7 +112,7 @@ class Notifier @Inject constructor(
             line.platform?.let { context.getString(R.string.board_platform, it) },
             when {
                 delay == null -> null
-                delay > 0 -> context.getString(R.string.board_late, delay)
+                delay > 0 -> context.getString(R.string.board_late, formatDelay(delay))
                 else -> context.getString(R.string.board_on_time)
             },
         )

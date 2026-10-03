@@ -65,6 +65,8 @@ class DepartureRepositoryTest {
         dayOffset = dayOffset,
         runDays = runDays,
         trainType = type,
+        originCode = "PNVL",
+        originName = "Panvel Junction",
     )
 
     private fun live(
@@ -86,6 +88,8 @@ class DepartureRepositoryTest {
         trainType = TrainType.LOCAL,
         status = status,
         isLive = true,
+        originCode = "PNVL",
+        originName = "PNVL",
     )
 
     @Test
@@ -108,6 +112,9 @@ class DepartureRepositoryTest {
         assertEquals("8", delayed.platform)
         // The live board carries only a code; the name comes from the timetable.
         assertEquals("Thane", delayed.destinationName)
+        // So does the origin, which is not in this test's station list.
+        assertEquals("Panvel Junction", delayed.originName)
+        assertEquals("Panvel Junction", board.departures.first { it.trainNumber == "2" }.originName)
         assertFalse(board.departures.first { it.trainNumber == "2" }.isLive)
     }
 

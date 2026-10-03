@@ -40,6 +40,7 @@ class RailRadarMapperTest {
         val train = liveBoard().first { it.trainNumber == "97434" }
 
         assertEquals("PR", train.destinationCode)
+        assertEquals("TNA", train.originCode)
         assertEquals(LocalTime.of(22, 54), train.scheduledTime)
         assertEquals(DepartureStatus.AT_STATION, train.status)
         assertEquals(8, train.delayMinutes)
@@ -83,6 +84,8 @@ class RailRadarMapperTest {
         val train = timetable.first { it.trainNumber == "97439" }
         assertEquals("Thane", train.destinationName)
         assertEquals("TNA", train.destinationCode)
+        assertEquals("CSMT", train.originCode)
+        assertEquals("Mumbai CSMT", train.originName)
         assertEquals(LocalTime.of(0, 4), train.departure)
         assertEquals(1, train.dayOffset)
         assertEquals(DayOfWeek.entries.toSet(), train.runDays)
