@@ -57,7 +57,7 @@ order, one at a time: "Do phase N of docs/BUILD_SPEC.md".
 |---|---|---|
 | 0 | Toolchain and first green build | Done 2026-10-03. `assembleDebug` passes; APK produced; git initialised |
 | 1 | Provider skeleton | Done 2026-10-03. 6 unit tests pass. Board screen not yet seen on a device (none connected) |
-| 2 | Station data | Not started |
+| 2 | Station data | Done 2026-10-03. 109 stations; 13 unit tests pass in total. Database import not yet run on a device |
 | 3 | Departure repository | Not started |
 | 4 | Screens | Not started |
 | 5 | Settings | Not started |
@@ -133,9 +133,18 @@ provider codes.
 
 **API budget.** Up to 10 calls to confirm codes for interchange stations.
 
-**Decision needed from the user.** Where station coordinates come from
-(RailRadar station lookups cost quota; OpenStreetMap is free but needs
-attribution).
+**Decision (2026-10-03).** Coordinates come from OpenStreetMap.
+
+**Result.**
+- 109 stations: Western 37, Central 51, Harbour 35; 14 are on two lines.
+  Line membership is listed by hand in `tools/stations/build-stations.mjs`.
+- Coordinates: OpenStreetMap via the Overpass API, © OpenStreetMap
+  contributors, ODbL. The app must show this credit (phase 4).
+- Codes: confirmed present in RailRadar's `GET /v1/lookup/stations`.
+- To regenerate: `node tools/stations/build-stations.mjs <osm.json>
+  <railradar-stations.json>`, then bump the database version.
+- API calls used: 5 (station directory, plus timetable boards for MMCT, BCL,
+  KJMG and KJRD).
 
 ## Phase 3: Departure repository
 
@@ -295,4 +304,17 @@ as written.
 
 ## Notes for later
 
-- (empty)
+- **Local codes can differ from mainline codes.** RailRadar files Mumbai
+  Central's locals under `BCL` (1,020 trains) while `MMCT` has none, and
+  Kanjurmarg's under `KJRD` while `KJMG` is empty. A code existing in the
+  directory does not prove it carries locals. Only Dadar (DR), Mumbai Central
+  and Kanjurmarg have been checked against a timetable; the other 106 codes are
+  unverified. Phase 3 should flag any station whose timetable has no locals.
+- Trans-Harbour (Thane to Vashi/Panvel) and Nerul to Uran stations are not in
+  the station list; the spec names only Western, Central and Harbour.
+- There are 109 stations and Android allows 100 geofences, so phase 7's
+  nearest-90 selection is required even with every line monitored.
+- Parel/Prabhadevi (290 m), Lower Parel/Currey Road (346 m) and
+  Matunga/Matunga Road (367 m) sit inside each other's 500 m radius. Phase 8
+  must decide what one alert shows when two stations are entered together.
+- Show the OpenStreetMap credit in the app (phase 4).

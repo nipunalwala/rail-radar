@@ -1,0 +1,1325 @@
+[
+ {
+  "id": "churchgate",
+  "name": "Churchgate",
+  "lat": 18.93548,
+  "lng": 72.827174,
+  "lines": [
+   "WESTERN"
+  ],
+  "providerCodes": [
+   "CCG"
+  ]
+ },
+ {
+  "id": "marine-lines",
+  "name": "Marine Lines",
+  "lat": 18.945764,
+  "lng": 72.823719,
+  "lines": [
+   "WESTERN"
+  ],
+  "providerCodes": [
+   "MEL"
+  ]
+ },
+ {
+  "id": "charni-road",
+  "name": "Charni Road",
+  "lat": 18.951844,
+  "lng": 72.81824,
+  "lines": [
+   "WESTERN"
+  ],
+  "providerCodes": [
+   "CYR"
+  ]
+ },
+ {
+  "id": "grant-road",
+  "name": "Grant Road",
+  "lat": 18.963355,
+  "lng": 72.815826,
+  "lines": [
+   "WESTERN"
+  ],
+  "providerCodes": [
+   "GTR"
+  ]
+ },
+ {
+  "id": "mumbai-central",
+  "name": "Mumbai Central",
+  "lat": 18.969586,
+  "lng": 72.819315,
+  "lines": [
+   "WESTERN"
+  ],
+  "providerCodes": [
+   "BCL"
+  ]
+ },
+ {
+  "id": "mahalaxmi",
+  "name": "Mahalaxmi",
+  "lat": 18.98252,
+  "lng": 72.82422,
+  "lines": [
+   "WESTERN"
+  ],
+  "providerCodes": [
+   "MX"
+  ]
+ },
+ {
+  "id": "lower-parel",
+  "name": "Lower Parel",
+  "lat": 18.99568,
+  "lng": 72.830276,
+  "lines": [
+   "WESTERN"
+  ],
+  "providerCodes": [
+   "PL"
+  ]
+ },
+ {
+  "id": "prabhadevi",
+  "name": "Prabhadevi",
+  "lat": 19.007472,
+  "lng": 72.835897,
+  "lines": [
+   "WESTERN"
+  ],
+  "providerCodes": [
+   "PBHD"
+  ]
+ },
+ {
+  "id": "dadar",
+  "name": "Dadar",
+  "lat": 19.018302,
+  "lng": 72.842937,
+  "lines": [
+   "WESTERN",
+   "CENTRAL"
+  ],
+  "providerCodes": [
+   "DDR",
+   "DR"
+  ]
+ },
+ {
+  "id": "matunga-road",
+  "name": "Matunga Road",
+  "lat": 19.027815,
+  "lng": 72.846681,
+  "lines": [
+   "WESTERN"
+  ],
+  "providerCodes": [
+   "MRU"
+  ]
+ },
+ {
+  "id": "mahim",
+  "name": "Mahim",
+  "lat": 19.040663,
+  "lng": 72.846604,
+  "lines": [
+   "WESTERN",
+   "HARBOUR"
+  ],
+  "providerCodes": [
+   "MM"
+  ]
+ },
+ {
+  "id": "bandra",
+  "name": "Bandra",
+  "lat": 19.054979,
+  "lng": 72.84022,
+  "lines": [
+   "WESTERN",
+   "HARBOUR"
+  ],
+  "providerCodes": [
+   "BA"
+  ]
+ },
+ {
+  "id": "khar-road",
+  "name": "Khar Road",
+  "lat": 19.068241,
+  "lng": 72.840041,
+  "lines": [
+   "WESTERN",
+   "HARBOUR"
+  ],
+  "providerCodes": [
+   "KHAR"
+  ]
+ },
+ {
+  "id": "santacruz",
+  "name": "Santacruz",
+  "lat": 19.081522,
+  "lng": 72.841757,
+  "lines": [
+   "WESTERN",
+   "HARBOUR"
+  ],
+  "providerCodes": [
+   "STC"
+  ]
+ },
+ {
+  "id": "vile-parle",
+  "name": "Vile Parle",
+  "lat": 19.09991,
+  "lng": 72.844004,
+  "lines": [
+   "WESTERN",
+   "HARBOUR"
+  ],
+  "providerCodes": [
+   "VLP"
+  ]
+ },
+ {
+  "id": "andheri",
+  "name": "Andheri",
+  "lat": 19.119698,
+  "lng": 72.846421,
+  "lines": [
+   "WESTERN",
+   "HARBOUR"
+  ],
+  "providerCodes": [
+   "ADH"
+  ]
+ },
+ {
+  "id": "jogeshwari",
+  "name": "Jogeshwari",
+  "lat": 19.136114,
+  "lng": 72.848936,
+  "lines": [
+   "WESTERN",
+   "HARBOUR"
+  ],
+  "providerCodes": [
+   "JOS"
+  ]
+ },
+ {
+  "id": "ram-mandir",
+  "name": "Ram Mandir",
+  "lat": 19.151023,
+  "lng": 72.850147,
+  "lines": [
+   "WESTERN",
+   "HARBOUR"
+  ],
+  "providerCodes": [
+   "RMAR"
+  ]
+ },
+ {
+  "id": "goregaon",
+  "name": "Goregaon",
+  "lat": 19.164869,
+  "lng": 72.849549,
+  "lines": [
+   "WESTERN",
+   "HARBOUR"
+  ],
+  "providerCodes": [
+   "GMN"
+  ]
+ },
+ {
+  "id": "malad",
+  "name": "Malad",
+  "lat": 19.186719,
+  "lng": 72.848588,
+  "lines": [
+   "WESTERN"
+  ],
+  "providerCodes": [
+   "MDD"
+  ]
+ },
+ {
+  "id": "kandivali",
+  "name": "Kandivali",
+  "lat": 19.204114,
+  "lng": 72.851738,
+  "lines": [
+   "WESTERN"
+  ],
+  "providerCodes": [
+   "KILE"
+  ]
+ },
+ {
+  "id": "borivali",
+  "name": "Borivali",
+  "lat": 19.229068,
+  "lng": 72.857363,
+  "lines": [
+   "WESTERN"
+  ],
+  "providerCodes": [
+   "BVI"
+  ]
+ },
+ {
+  "id": "dahisar",
+  "name": "Dahisar",
+  "lat": 19.249357,
+  "lng": 72.85963,
+  "lines": [
+   "WESTERN"
+  ],
+  "providerCodes": [
+   "DIC"
+  ]
+ },
+ {
+  "id": "mira-road",
+  "name": "Mira Road",
+  "lat": 19.281698,
+  "lng": 72.856068,
+  "lines": [
+   "WESTERN"
+  ],
+  "providerCodes": [
+   "MIRA"
+  ]
+ },
+ {
+  "id": "bhayandar",
+  "name": "Bhayandar",
+  "lat": 19.310185,
+  "lng": 72.852699,
+  "lines": [
+   "WESTERN"
+  ],
+  "providerCodes": [
+   "BYR"
+  ]
+ },
+ {
+  "id": "naigaon",
+  "name": "Naigaon",
+  "lat": 19.351093,
+  "lng": 72.846523,
+  "lines": [
+   "WESTERN"
+  ],
+  "providerCodes": [
+   "NIG"
+  ]
+ },
+ {
+  "id": "vasai-road",
+  "name": "Vasai Road",
+  "lat": 19.382668,
+  "lng": 72.832025,
+  "lines": [
+   "WESTERN"
+  ],
+  "providerCodes": [
+   "BSR"
+  ]
+ },
+ {
+  "id": "nallasopara",
+  "name": "Nallasopara",
+  "lat": 19.4179,
+  "lng": 72.818569,
+  "lines": [
+   "WESTERN"
+  ],
+  "providerCodes": [
+   "NSP"
+  ]
+ },
+ {
+  "id": "virar",
+  "name": "Virar",
+  "lat": 19.455306,
+  "lng": 72.811816,
+  "lines": [
+   "WESTERN"
+  ],
+  "providerCodes": [
+   "VR"
+  ]
+ },
+ {
+  "id": "vaitarna",
+  "name": "Vaitarna",
+  "lat": 19.518652,
+  "lng": 72.849977,
+  "lines": [
+   "WESTERN"
+  ],
+  "providerCodes": [
+   "VTN"
+  ]
+ },
+ {
+  "id": "saphale",
+  "name": "Saphale",
+  "lat": 19.577132,
+  "lng": 72.821881,
+  "lines": [
+   "WESTERN"
+  ],
+  "providerCodes": [
+   "SAH"
+  ]
+ },
+ {
+  "id": "kelve-road",
+  "name": "Kelve Road",
+  "lat": 19.624053,
+  "lng": 72.791175,
+  "lines": [
+   "WESTERN"
+  ],
+  "providerCodes": [
+   "KLV"
+  ]
+ },
+ {
+  "id": "palghar",
+  "name": "Palghar",
+  "lat": 19.697888,
+  "lng": 72.771889,
+  "lines": [
+   "WESTERN"
+  ],
+  "providerCodes": [
+   "PLG"
+  ]
+ },
+ {
+  "id": "umroli",
+  "name": "Umroli",
+  "lat": 19.755761,
+  "lng": 72.760451,
+  "lines": [
+   "WESTERN"
+  ],
+  "providerCodes": [
+   "UOI"
+  ]
+ },
+ {
+  "id": "boisar",
+  "name": "Boisar",
+  "lat": 19.798487,
+  "lng": 72.761452,
+  "lines": [
+   "WESTERN"
+  ],
+  "providerCodes": [
+   "BOR"
+  ]
+ },
+ {
+  "id": "vangaon",
+  "name": "Vangaon",
+  "lat": 19.882991,
+  "lng": 72.763166,
+  "lines": [
+   "WESTERN"
+  ],
+  "providerCodes": [
+   "VGN"
+  ]
+ },
+ {
+  "id": "dahanu-road",
+  "name": "Dahanu Road",
+  "lat": 19.991524,
+  "lng": 72.743408,
+  "lines": [
+   "WESTERN"
+  ],
+  "providerCodes": [
+   "DRD"
+  ]
+ },
+ {
+  "id": "mumbai-csmt",
+  "name": "Mumbai CSMT",
+  "lat": 18.940493,
+  "lng": 72.835786,
+  "lines": [
+   "CENTRAL",
+   "HARBOUR"
+  ],
+  "providerCodes": [
+   "CSMT"
+  ]
+ },
+ {
+  "id": "masjid",
+  "name": "Masjid",
+  "lat": 18.952295,
+  "lng": 72.838177,
+  "lines": [
+   "CENTRAL",
+   "HARBOUR"
+  ],
+  "providerCodes": [
+   "MSD"
+  ]
+ },
+ {
+  "id": "sandhurst-road",
+  "name": "Sandhurst Road",
+  "lat": 18.960924,
+  "lng": 72.839372,
+  "lines": [
+   "CENTRAL",
+   "HARBOUR"
+  ],
+  "providerCodes": [
+   "SNRD"
+  ]
+ },
+ {
+  "id": "byculla",
+  "name": "Byculla",
+  "lat": 18.976622,
+  "lng": 72.832794,
+  "lines": [
+   "CENTRAL"
+  ],
+  "providerCodes": [
+   "BY"
+  ]
+ },
+ {
+  "id": "chinchpokli",
+  "name": "Chinchpokli",
+  "lat": 18.987198,
+  "lng": 72.832672,
+  "lines": [
+   "CENTRAL"
+  ],
+  "providerCodes": [
+   "CHG"
+  ]
+ },
+ {
+  "id": "currey-road",
+  "name": "Currey Road",
+  "lat": 18.993749,
+  "lng": 72.832856,
+  "lines": [
+   "CENTRAL"
+  ],
+  "providerCodes": [
+   "CRD"
+  ]
+ },
+ {
+  "id": "parel",
+  "name": "Parel",
+  "lat": 19.009482,
+  "lng": 72.837661,
+  "lines": [
+   "CENTRAL"
+  ],
+  "providerCodes": [
+   "PR"
+  ]
+ },
+ {
+  "id": "matunga",
+  "name": "Matunga",
+  "lat": 19.027436,
+  "lng": 72.850147,
+  "lines": [
+   "CENTRAL"
+  ],
+  "providerCodes": [
+   "MTN"
+  ]
+ },
+ {
+  "id": "sion",
+  "name": "Sion",
+  "lat": 19.046521,
+  "lng": 72.863283,
+  "lines": [
+   "CENTRAL"
+  ],
+  "providerCodes": [
+   "SIN"
+  ]
+ },
+ {
+  "id": "kurla",
+  "name": "Kurla",
+  "lat": 19.06528,
+  "lng": 72.879381,
+  "lines": [
+   "CENTRAL",
+   "HARBOUR"
+  ],
+  "providerCodes": [
+   "CLA"
+  ]
+ },
+ {
+  "id": "vidyavihar",
+  "name": "Vidyavihar",
+  "lat": 19.079542,
+  "lng": 72.897117,
+  "lines": [
+   "CENTRAL"
+  ],
+  "providerCodes": [
+   "VVH"
+  ]
+ },
+ {
+  "id": "ghatkopar",
+  "name": "Ghatkopar",
+  "lat": 19.085693,
+  "lng": 72.908367,
+  "lines": [
+   "CENTRAL"
+  ],
+  "providerCodes": [
+   "GC"
+  ]
+ },
+ {
+  "id": "vikhroli",
+  "name": "Vikhroli",
+  "lat": 19.11148,
+  "lng": 72.928021,
+  "lines": [
+   "CENTRAL"
+  ],
+  "providerCodes": [
+   "VK"
+  ]
+ },
+ {
+  "id": "kanjurmarg",
+  "name": "Kanjurmarg",
+  "lat": 19.128653,
+  "lng": 72.928039,
+  "lines": [
+   "CENTRAL"
+  ],
+  "providerCodes": [
+   "KJRD"
+  ]
+ },
+ {
+  "id": "bhandup",
+  "name": "Bhandup",
+  "lat": 19.142757,
+  "lng": 72.937654,
+  "lines": [
+   "CENTRAL"
+  ],
+  "providerCodes": [
+   "BND"
+  ]
+ },
+ {
+  "id": "nahur",
+  "name": "Nahur",
+  "lat": 19.15464,
+  "lng": 72.946653,
+  "lines": [
+   "CENTRAL"
+  ],
+  "providerCodes": [
+   "NHU"
+  ]
+ },
+ {
+  "id": "mulund",
+  "name": "Mulund",
+  "lat": 19.172137,
+  "lng": 72.956697,
+  "lines": [
+   "CENTRAL"
+  ],
+  "providerCodes": [
+   "MLND"
+  ]
+ },
+ {
+  "id": "thane",
+  "name": "Thane",
+  "lat": 19.186483,
+  "lng": 72.975766,
+  "lines": [
+   "CENTRAL"
+  ],
+  "providerCodes": [
+   "TNA"
+  ]
+ },
+ {
+  "id": "kalwa",
+  "name": "Kalwa",
+  "lat": 19.195224,
+  "lng": 72.996333,
+  "lines": [
+   "CENTRAL"
+  ],
+  "providerCodes": [
+   "KLVA"
+  ]
+ },
+ {
+  "id": "mumbra",
+  "name": "Mumbra",
+  "lat": 19.189943,
+  "lng": 73.023075,
+  "lines": [
+   "CENTRAL"
+  ],
+  "providerCodes": [
+   "MBQ"
+  ]
+ },
+ {
+  "id": "diva",
+  "name": "Diva",
+  "lat": 19.188756,
+  "lng": 73.041417,
+  "lines": [
+   "CENTRAL"
+  ],
+  "providerCodes": [
+   "DIVA"
+  ]
+ },
+ {
+  "id": "kopar",
+  "name": "Kopar",
+  "lat": 19.212423,
+  "lng": 73.078865,
+  "lines": [
+   "CENTRAL"
+  ],
+  "providerCodes": [
+   "KOPR"
+  ]
+ },
+ {
+  "id": "dombivli",
+  "name": "Dombivli",
+  "lat": 19.218049,
+  "lng": 73.086136,
+  "lines": [
+   "CENTRAL"
+  ],
+  "providerCodes": [
+   "DI"
+  ]
+ },
+ {
+  "id": "thakurli",
+  "name": "Thakurli",
+  "lat": 19.226281,
+  "lng": 73.098017,
+  "lines": [
+   "CENTRAL"
+  ],
+  "providerCodes": [
+   "THK"
+  ]
+ },
+ {
+  "id": "kalyan",
+  "name": "Kalyan",
+  "lat": 19.235822,
+  "lng": 73.13081,
+  "lines": [
+   "CENTRAL"
+  ],
+  "providerCodes": [
+   "KYN"
+  ]
+ },
+ {
+  "id": "shahad",
+  "name": "Shahad",
+  "lat": 19.243584,
+  "lng": 73.158075,
+  "lines": [
+   "CENTRAL"
+  ],
+  "providerCodes": [
+   "SHAD"
+  ]
+ },
+ {
+  "id": "ambivli",
+  "name": "Ambivli",
+  "lat": 19.268291,
+  "lng": 73.172246,
+  "lines": [
+   "CENTRAL"
+  ],
+  "providerCodes": [
+   "ABY"
+  ]
+ },
+ {
+  "id": "titwala",
+  "name": "Titwala",
+  "lat": 19.296383,
+  "lng": 73.203066,
+  "lines": [
+   "CENTRAL"
+  ],
+  "providerCodes": [
+   "TLA"
+  ]
+ },
+ {
+  "id": "khadavli",
+  "name": "Khadavli",
+  "lat": 19.356724,
+  "lng": 73.219038,
+  "lines": [
+   "CENTRAL"
+  ],
+  "providerCodes": [
+   "KDV"
+  ]
+ },
+ {
+  "id": "vasind",
+  "name": "Vasind",
+  "lat": 19.406509,
+  "lng": 73.267468,
+  "lines": [
+   "CENTRAL"
+  ],
+  "providerCodes": [
+   "VSD"
+  ]
+ },
+ {
+  "id": "asangaon",
+  "name": "Asangaon",
+  "lat": 19.439747,
+  "lng": 73.308012,
+  "lines": [
+   "CENTRAL"
+  ],
+  "providerCodes": [
+   "ASO"
+  ]
+ },
+ {
+  "id": "atgaon",
+  "name": "Atgaon",
+  "lat": 19.503542,
+  "lng": 73.328257,
+  "lines": [
+   "CENTRAL"
+  ],
+  "providerCodes": [
+   "ATG"
+  ]
+ },
+ {
+  "id": "thansit",
+  "name": "Thansit",
+  "lat": 19.550337,
+  "lng": 73.35224,
+  "lines": [
+   "CENTRAL"
+  ],
+  "providerCodes": [
+   "THS"
+  ]
+ },
+ {
+  "id": "khardi",
+  "name": "Khardi",
+  "lat": 19.580216,
+  "lng": 73.393825,
+  "lines": [
+   "CENTRAL"
+  ],
+  "providerCodes": [
+   "KE"
+  ]
+ },
+ {
+  "id": "umbermali",
+  "name": "Umbermali",
+  "lat": 19.628367,
+  "lng": 73.422953,
+  "lines": [
+   "CENTRAL"
+  ],
+  "providerCodes": [
+   "OMB"
+  ]
+ },
+ {
+  "id": "kasara",
+  "name": "Kasara",
+  "lat": 19.648233,
+  "lng": 73.473589,
+  "lines": [
+   "CENTRAL"
+  ],
+  "providerCodes": [
+   "KSRA"
+  ]
+ },
+ {
+  "id": "vithalwadi",
+  "name": "Vithalwadi",
+  "lat": 19.22842,
+  "lng": 73.149108,
+  "lines": [
+   "CENTRAL"
+  ],
+  "providerCodes": [
+   "VLDI"
+  ]
+ },
+ {
+  "id": "ulhasnagar",
+  "name": "Ulhasnagar",
+  "lat": 19.21788,
+  "lng": 73.163078,
+  "lines": [
+   "CENTRAL"
+  ],
+  "providerCodes": [
+   "ULNR"
+  ]
+ },
+ {
+  "id": "ambarnath",
+  "name": "Ambarnath",
+  "lat": 19.210061,
+  "lng": 73.184688,
+  "lines": [
+   "CENTRAL"
+  ],
+  "providerCodes": [
+   "ABH"
+  ]
+ },
+ {
+  "id": "badlapur",
+  "name": "Badlapur",
+  "lat": 19.166624,
+  "lng": 73.238906,
+  "lines": [
+   "CENTRAL"
+  ],
+  "providerCodes": [
+   "BUD"
+  ]
+ },
+ {
+  "id": "vangani",
+  "name": "Vangani",
+  "lat": 19.094332,
+  "lng": 73.300895,
+  "lines": [
+   "CENTRAL"
+  ],
+  "providerCodes": [
+   "VGI"
+  ]
+ },
+ {
+  "id": "shelu",
+  "name": "Shelu",
+  "lat": 19.063516,
+  "lng": 73.317926,
+  "lines": [
+   "CENTRAL"
+  ],
+  "providerCodes": [
+   "SHLU"
+  ]
+ },
+ {
+  "id": "neral",
+  "name": "Neral",
+  "lat": 19.027431,
+  "lng": 73.318437,
+  "lines": [
+   "CENTRAL"
+  ],
+  "providerCodes": [
+   "NRL"
+  ]
+ },
+ {
+  "id": "bhivpuri-road",
+  "name": "Bhivpuri Road",
+  "lat": 18.970549,
+  "lng": 73.331437,
+  "lines": [
+   "CENTRAL"
+  ],
+  "providerCodes": [
+   "BVS"
+  ]
+ },
+ {
+  "id": "karjat",
+  "name": "Karjat",
+  "lat": 18.909965,
+  "lng": 73.320963,
+  "lines": [
+   "CENTRAL"
+  ],
+  "providerCodes": [
+   "KJT"
+  ]
+ },
+ {
+  "id": "palasdari",
+  "name": "Palasdari",
+  "lat": 18.884354,
+  "lng": 73.320813,
+  "lines": [
+   "CENTRAL"
+  ],
+  "providerCodes": [
+   "PDI"
+  ]
+ },
+ {
+  "id": "kelavli",
+  "name": "Kelavli",
+  "lat": 18.844545,
+  "lng": 73.318912,
+  "lines": [
+   "CENTRAL"
+  ],
+  "providerCodes": [
+   "KLY"
+  ]
+ },
+ {
+  "id": "dolavli",
+  "name": "Dolavli",
+  "lat": 18.833163,
+  "lng": 73.320344,
+  "lines": [
+   "CENTRAL"
+  ],
+  "providerCodes": [
+   "DLV"
+  ]
+ },
+ {
+  "id": "lowjee",
+  "name": "Lowjee",
+  "lat": 18.809571,
+  "lng": 73.335185,
+  "lines": [
+   "CENTRAL"
+  ],
+  "providerCodes": [
+   "LWJ"
+  ]
+ },
+ {
+  "id": "khopoli",
+  "name": "Khopoli",
+  "lat": 18.788473,
+  "lng": 73.346071,
+  "lines": [
+   "CENTRAL"
+  ],
+  "providerCodes": [
+   "KHPI"
+  ]
+ },
+ {
+  "id": "dockyard-road",
+  "name": "Dockyard Road",
+  "lat": 18.967477,
+  "lng": 72.844548,
+  "lines": [
+   "HARBOUR"
+  ],
+  "providerCodes": [
+   "DKRD"
+  ]
+ },
+ {
+  "id": "reay-road",
+  "name": "Reay Road",
+  "lat": 18.977551,
+  "lng": 72.844101,
+  "lines": [
+   "HARBOUR"
+  ],
+  "providerCodes": [
+   "RRD"
+  ]
+ },
+ {
+  "id": "cotton-green",
+  "name": "Cotton Green",
+  "lat": 18.987187,
+  "lng": 72.843897,
+  "lines": [
+   "HARBOUR"
+  ],
+  "providerCodes": [
+   "CTGN"
+  ]
+ },
+ {
+  "id": "sewri",
+  "name": "Sewri",
+  "lat": 18.99878,
+  "lng": 72.854422,
+  "lines": [
+   "HARBOUR"
+  ],
+  "providerCodes": [
+   "SVE"
+  ]
+ },
+ {
+  "id": "vadala-road",
+  "name": "Vadala Road",
+  "lat": 19.016136,
+  "lng": 72.858913,
+  "lines": [
+   "HARBOUR"
+  ],
+  "providerCodes": [
+   "VDLR"
+  ]
+ },
+ {
+  "id": "gtb-nagar",
+  "name": "GTB Nagar",
+  "lat": 19.038005,
+  "lng": 72.864346,
+  "lines": [
+   "HARBOUR"
+  ],
+  "providerCodes": [
+   "GTBN"
+  ]
+ },
+ {
+  "id": "chunabhatti",
+  "name": "Chunabhatti",
+  "lat": 19.05177,
+  "lng": 72.869097,
+  "lines": [
+   "HARBOUR"
+  ],
+  "providerCodes": [
+   "CHF"
+  ]
+ },
+ {
+  "id": "tilak-nagar",
+  "name": "Tilak Nagar",
+  "lat": 19.065786,
+  "lng": 72.89047,
+  "lines": [
+   "HARBOUR"
+  ],
+  "providerCodes": [
+   "TKNG"
+  ]
+ },
+ {
+  "id": "chembur",
+  "name": "Chembur",
+  "lat": 19.062632,
+  "lng": 72.90114,
+  "lines": [
+   "HARBOUR"
+  ],
+  "providerCodes": [
+   "CMBR"
+  ]
+ },
+ {
+  "id": "govandi",
+  "name": "Govandi",
+  "lat": 19.055369,
+  "lng": 72.91507,
+  "lines": [
+   "HARBOUR"
+  ],
+  "providerCodes": [
+   "GV"
+  ]
+ },
+ {
+  "id": "mankhurd",
+  "name": "Mankhurd",
+  "lat": 19.048209,
+  "lng": 72.931714,
+  "lines": [
+   "HARBOUR"
+  ],
+  "providerCodes": [
+   "MNKD"
+  ]
+ },
+ {
+  "id": "vashi",
+  "name": "Vashi",
+  "lat": 19.063291,
+  "lng": 72.998762,
+  "lines": [
+   "HARBOUR"
+  ],
+  "providerCodes": [
+   "VSH"
+  ]
+ },
+ {
+  "id": "sanpada",
+  "name": "Sanpada",
+  "lat": 19.065986,
+  "lng": 73.009533,
+  "lines": [
+   "HARBOUR"
+  ],
+  "providerCodes": [
+   "SNCR"
+  ]
+ },
+ {
+  "id": "juinagar",
+  "name": "Juinagar",
+  "lat": 19.055865,
+  "lng": 73.01825,
+  "lines": [
+   "HARBOUR"
+  ],
+  "providerCodes": [
+   "JNJ"
+  ]
+ },
+ {
+  "id": "nerul",
+  "name": "Nerul",
+  "lat": 19.03358,
+  "lng": 73.018158,
+  "lines": [
+   "HARBOUR"
+  ],
+  "providerCodes": [
+   "NEU"
+  ]
+ },
+ {
+  "id": "seawoods-darave",
+  "name": "Seawoods Darave",
+  "lat": 19.021819,
+  "lng": 73.019159,
+  "lines": [
+   "HARBOUR"
+  ],
+  "providerCodes": [
+   "SWDV"
+  ]
+ },
+ {
+  "id": "belapur-cbd",
+  "name": "Belapur CBD",
+  "lat": 19.019008,
+  "lng": 73.03913,
+  "lines": [
+   "HARBOUR"
+  ],
+  "providerCodes": [
+   "BEPR"
+  ]
+ },
+ {
+  "id": "kharghar",
+  "name": "Kharghar",
+  "lat": 19.025773,
+  "lng": 73.059185,
+  "lines": [
+   "HARBOUR"
+  ],
+  "providerCodes": [
+   "KHAG"
+  ]
+ },
+ {
+  "id": "mansarovar",
+  "name": "Mansarovar",
+  "lat": 19.016434,
+  "lng": 73.080655,
+  "lines": [
+   "HARBOUR"
+  ],
+  "providerCodes": [
+   "MANR"
+  ]
+ },
+ {
+  "id": "khandeshwar",
+  "name": "Khandeshwar",
+  "lat": 19.00735,
+  "lng": 73.095283,
+  "lines": [
+   "HARBOUR"
+  ],
+  "providerCodes": [
+   "KNDS"
+  ]
+ },
+ {
+  "id": "panvel",
+  "name": "Panvel",
+  "lat": 18.990939,
+  "lng": 73.120605,
+  "lines": [
+   "HARBOUR"
+  ],
+  "providerCodes": [
+   "PNVL"
+  ]
+ },
+ {
+  "id": "king-s-circle",
+  "name": "King's Circle",
+  "lat": 19.031682,
+  "lng": 72.857738,
+  "lines": [
+   "HARBOUR"
+  ],
+  "providerCodes": [
+   "KCE"
+  ]
+ }
+]

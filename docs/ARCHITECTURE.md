@@ -202,9 +202,15 @@ id, name, lat, lng, lines[], providerCodes[]
 ```
 
 `providerCodes` is a list because interchange stations have one code per
-railway. Dadar's Central code `DR` reports `railwayLines: "C"` only; the Western
-side has its own code. For such stations the repository queries each code and
-merges the boards.
+railway. Dadar is `DR` on Central and `DDR` on Western, and is the only such
+station on the three lines. For it the repository queries each code and merges
+the boards.
+
+The list holds 109 stations (Western 37, Central 51, Harbour 35, with 14 shared).
+Coordinates are from OpenStreetMap (© OpenStreetMap contributors, ODbL), which
+the app must credit. The code for locals is not always the mainline code:
+Mumbai Central's locals are under `BCL`, not `MMCT`, and Kanjurmarg's under
+`KJRD`, not `KJMG`.
 
 ### 6.2 Geofencing
 
