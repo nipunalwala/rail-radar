@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.trainnearme.core.domain.effectiveTime
+import com.trainnearme.core.model.BoardSource
 import com.trainnearme.core.model.Departure
 import java.time.Duration
 import java.time.Instant
@@ -47,12 +48,27 @@ fun StationBoardScreen(viewModel: StationBoardViewModel = hiltViewModel()) {
                 BoardUiState.Loading -> CircularProgressIndicator()
                 is BoardUiState.Failed -> Text(s.message, Modifier.padding(24.dp))
                 is BoardUiState.Loaded ->
-                    if (s.departures.isEmpty()) {
-                        Text("No upcoming local trains")
+                    if (s.board.departures.isEmpty()) {
+                        Text(
+                            if (s.board.source == BoardSource.UNAVAILABLE) {
+                                "Train data unavailable"
+                            } else {
+                                "No upcoming local trains"
+                            },
+                        )
                     } else {
                         LazyColumn(Modifier.fillMaxSize()) {
-                            items(s.departures, key = { it.trainNumber }) { departure ->
-                                DepartureRow(departure, s.asOf)
+                            if (s.board.source == BoardSource.SCHEDULED) {
+                                item {
+                                    Text(
+                                        "Scheduled times (live data unavailable)",
+                                        Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                                        style = MaterialTheme.typography.labelLarge,
+                                    )
+                                }
+                            }
+                            items(s.board.departures, key = { it.trainNumber }) { departure ->
+                                DepartureRow(departure, s.board.asOf)
                                 HorizontalDivider()
                             }
                         }

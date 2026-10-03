@@ -31,7 +31,8 @@ internal fun LiveEntryDto.toDeparture(): Departure? {
         trainNumber = train.number,
         trainName = train.name,
         destinationCode = destinationCode,
-        destinationName = destinationFromName(train.name) ?: destinationCode,
+        // The live board has no station names; DepartureRepository fills this in.
+        destinationName = destinationCode,
         scheduledTime = scheduled,
         expectedTime = live?.expectedDepartureTime?.toInstantOrNull(),
         delayMinutes = if (isLive) live?.delayMinutes else null,
@@ -50,6 +51,7 @@ internal fun TimetableEntryDto.toScheduledDeparture(): ScheduledDeparture? {
         destinationCode = train.destination?.code.orEmpty(),
         destinationName = train.destination?.name.orEmpty(),
         departure = departure,
+        dayOffset = ((stop.departureDay ?: 1) - 1).coerceAtLeast(0),
         runDays = train.runDays.mapNotNull { DAYS[it.lowercase()] }.toSet(),
         trainType = train.type.toTrainType(),
     )
@@ -66,14 +68,6 @@ private fun String?.toStatus(): DepartureStatus = when (this) {
     "departed" -> DepartureStatus.DEPARTED
     else -> DepartureStatus.UNKNOWN
 }
-
-// The live board gives the destination as a code only. Local names follow
-// "Thane - Parel Local", so the readable name is recovered from there.
-private fun destinationFromName(name: String): String? =
-    name.substringAfter(" - ", "")
-        .removeSuffix(" Local")
-        .trim()
-        .takeIf { it.isNotEmpty() }
 
 private fun String.toLocalTimeOrNull(): LocalTime? =
     runCatching { LocalTime.parse(this) }.getOrNull()

@@ -30,6 +30,9 @@ data class ScheduledDeparture(
     val destinationCode: String,
     val destinationName: String,
     val departure: LocalTime,
+    /** Days after the train's start day that it leaves this station (0 or 1). */
+    val dayOffset: Int,
+    /** Days on which the train starts its run. */
     val runDays: Set<DayOfWeek>,
     val trainType: TrainType,
 )

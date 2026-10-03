@@ -58,7 +58,7 @@ order, one at a time: "Do phase N of docs/BUILD_SPEC.md".
 | 0 | Toolchain and first green build | Done 2026-10-03. `assembleDebug` passes; APK produced; git initialised |
 | 1 | Provider skeleton | Done 2026-10-03. 6 unit tests pass. Board screen not yet seen on a device (none connected) |
 | 2 | Station data | Done 2026-10-03. 109 stations; 13 unit tests pass in total. Database import not yet run on a device |
-| 3 | Departure repository | Not started |
+| 3 | Departure repository | Done 2026-10-03. 28 unit tests pass in total. Room queries, the refresh worker and the app start-up have not run on a device |
 | 4 | Screens | Not started |
 | 5 | Settings | Not started |
 | 6 | Permissions and onboarding | Not started |

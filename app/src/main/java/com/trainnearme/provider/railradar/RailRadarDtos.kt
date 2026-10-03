@@ -74,4 +74,5 @@ data class StationRefDto(
 @Serializable
 data class TimetableStopDto(
     val departure: String? = null,
+    val departureDay: Int? = null,
 )

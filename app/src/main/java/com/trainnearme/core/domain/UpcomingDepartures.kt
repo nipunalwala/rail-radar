@@ -10,7 +10,7 @@ import java.time.ZoneId
 val MUMBAI_ZONE: ZoneId = ZoneId.of("Asia/Kolkata")
 
 // A train whose expected time has just passed may still be at the platform.
-private val GRACE = Duration.ofMinutes(2)
+internal val DEPARTURE_GRACE: Duration = Duration.ofMinutes(2)
 
 /** When the train is expected to leave: the live estimate if present, else the schedule. */
 fun Departure.effectiveTime(now: Instant, zone: ZoneId = MUMBAI_ZONE): Instant {
@@ -36,7 +36,7 @@ fun upcomingDepartures(
     departures.asSequence()
         .filter { it.status != DepartureStatus.DEPARTED }
         .filter { !localsOnly || it.trainType == TrainType.LOCAL }
-        .filter { it.effectiveTime(now, zone) >= now.minus(GRACE) }
+        .filter { it.effectiveTime(now, zone) >= now.minus(DEPARTURE_GRACE) }
         .sortedBy { it.effectiveTime(now, zone) }
         .take(count)
         .toList()

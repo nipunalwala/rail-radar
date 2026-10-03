@@ -2,32 +2,30 @@ package com.trainnearme.ui.board
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.trainnearme.core.data.TrainDataProvider
-import com.trainnearme.core.domain.upcomingDepartures
-import com.trainnearme.core.model.Departure
+import com.trainnearme.core.data.DepartureRepository
+import com.trainnearme.core.model.DepartureBoard
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.time.Instant
 import javax.inject.Inject
 
 sealed interface BoardUiState {
     data object Loading : BoardUiState
-    data class Loaded(val departures: List<Departure>, val asOf: Instant) : BoardUiState
+    data class Loaded(val board: DepartureBoard) : BoardUiState
     data class Failed(val message: String) : BoardUiState
 }
 
 @HiltViewModel
 class StationBoardViewModel @Inject constructor(
-    private val provider: TrainDataProvider,
+    private val departures: DepartureRepository,
 ) : ViewModel() {
 
     // Fixed station until proximity detection picks it (milestone 3).
-    val stationName = "Dadar (Central)"
-    private val stationCode = "DR"
+    val stationName = "Dadar"
+    private val stationId = "dadar"
 
     private val _state = MutableStateFlow<BoardUiState>(BoardUiState.Loading)
     val state: StateFlow<BoardUiState> = _state.asStateFlow()
@@ -40,9 +38,9 @@ class StationBoardViewModel @Inject constructor(
         viewModelScope.launch {
             _state.value = BoardUiState.Loading
             _state.value = try {
-                val board = provider.liveBoard(stationCode, hoursAhead = 2)
-                val now = Instant.now()
-                BoardUiState.Loaded(upcomingDepartures(board, now, count = 10), now)
+                departures.nextDepartures(stationId, count = 10)
+                    ?.let { BoardUiState.Loaded(it) }
+                    ?: BoardUiState.Failed("Unknown station")
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {

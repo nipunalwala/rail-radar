@@ -6,6 +6,7 @@ import com.trainnearme.core.data.db.AppDatabase
 import com.trainnearme.core.data.station.STATIONS_ASSET
 import com.trainnearme.core.data.station.StationDao
 import com.trainnearme.core.data.station.StationRepository
+import com.trainnearme.core.data.timetable.TimetableDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,6 +29,9 @@ object DatabaseModule {
 
     @Provides
     fun provideStationDao(database: AppDatabase): StationDao = database.stationDao()
+
+    @Provides
+    fun provideTimetableDao(database: AppDatabase): TimetableDao = database.timetableDao()
 
     @Provides
     @Singleton

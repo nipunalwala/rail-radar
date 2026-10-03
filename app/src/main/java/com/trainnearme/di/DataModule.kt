@@ -1,7 +1,10 @@
 package com.trainnearme.di
 
 import com.trainnearme.BuildConfig
+import com.trainnearme.core.data.DepartureRepository
 import com.trainnearme.core.data.TrainDataProvider
+import com.trainnearme.core.data.station.StationRepository
+import com.trainnearme.core.data.timetable.TimetableDao
 import com.trainnearme.provider.railradar.RailRadarApi
 import com.trainnearme.provider.railradar.RailRadarProvider
 import dagger.Module
@@ -48,4 +51,12 @@ object DataModule {
     @Provides
     @Singleton
     fun provideTrainDataProvider(provider: RailRadarProvider): TrainDataProvider = provider
+
+    @Provides
+    @Singleton
+    fun provideDepartureRepository(
+        stations: StationRepository,
+        provider: TrainDataProvider,
+        timetableDao: TimetableDao,
+    ): DepartureRepository = DepartureRepository(stations, provider, timetableDao)
 }
