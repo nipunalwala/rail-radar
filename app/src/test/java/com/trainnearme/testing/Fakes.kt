@@ -3,6 +3,8 @@ package com.trainnearme.testing
 import com.trainnearme.core.data.SettingsRepository
 import com.trainnearme.core.data.TrainDataProvider
 import com.trainnearme.core.model.Settings
+import com.trainnearme.core.permissions.PermissionChecker
+import com.trainnearme.core.permissions.PermissionStatus
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import com.trainnearme.core.data.station.StationDao
@@ -81,6 +83,16 @@ class FakeSettingsRepository(initial: Settings = Settings()) : SettingsRepositor
     override suspend fun update(transform: (Settings) -> Settings) {
         state.value = transform(state.value).sanitised()
     }
+}
+
+class FakePermissionChecker(
+    var status: PermissionStatus = PermissionStatus(
+        notifications = true,
+        foregroundLocation = true,
+        backgroundLocation = true,
+    ),
+) : PermissionChecker {
+    override fun current() = status
 }
 
 class FakeLocationProvider(var location: LatLng? = null) : LocationProvider {

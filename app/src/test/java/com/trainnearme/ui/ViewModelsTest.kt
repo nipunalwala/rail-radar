@@ -9,7 +9,12 @@ import com.trainnearme.core.model.Line
 import com.trainnearme.core.model.ScheduledDeparture
 import com.trainnearme.core.model.Settings
 import com.trainnearme.core.model.TrainType
+import com.trainnearme.core.permissions.AlertStatus
+import com.trainnearme.core.permissions.PermissionStatus
+import com.trainnearme.core.permissions.alertStatus
 import com.trainnearme.testing.FakeLocationProvider
+import com.trainnearme.testing.FakePermissionChecker
+import com.trainnearme.ui.onboarding.OnboardingViewModel
 import com.trainnearme.testing.FakeProvider
 import com.trainnearme.testing.FakeSettingsRepository
 import com.trainnearme.testing.FakeStationDao
@@ -72,7 +77,63 @@ class ViewModelsTest {
         trainType = TrainType.LOCAL,
     )
 
-    private fun homeViewModel() = HomeViewModel(stations, departures, location, settings)
+    private val permissions = FakePermissionChecker()
+
+    private fun homeViewModel() = HomeViewModel(stations, departures, location, settings, permissions)
+
+    @Test
+    fun `alert status names the first thing that is missing`() {
+        val all = PermissionStatus(notifications = true, foregroundLocation = true, backgroundLocation = true)
+
+        assertEquals(AlertStatus.ON, alertStatus(true, all))
+        assertEquals(AlertStatus.OFF, alertStatus(false, all))
+        assertEquals(AlertStatus.OFF, alertStatus(false, all.copy(foregroundLocation = false)))
+        assertEquals(
+            AlertStatus.NEEDS_LOCATION,
+            alertStatus(true, PermissionStatus(notifications = false, foregroundLocation = false, backgroundLocation = false)),
+        )
+        assertEquals(AlertStatus.NEEDS_BACKGROUND_LOCATION, alertStatus(true, all.copy(backgroundLocation = false)))
+        assertEquals(AlertStatus.NEEDS_NOTIFICATIONS, alertStatus(true, all.copy(notifications = false)))
+    }
+
+    @Test
+    fun `home shows alert status and follows permission and setting changes`() = runTest {
+        permissions.status = PermissionStatus(notifications = true, foregroundLocation = false, backgroundLocation = false)
+        location.location = null
+        val viewModel = homeViewModel()
+        assertEquals(AlertStatus.NEEDS_LOCATION, viewModel.state.value.alertStatus)
+        assertNull(viewModel.state.value.station)
+
+        // The user grants location in the permissions screen and comes back.
+        permissions.status = PermissionStatus(notifications = true, foregroundLocation = true, backgroundLocation = false)
+        location.location = besideThane
+        viewModel.onResume()
+        assertEquals(AlertStatus.NEEDS_BACKGROUND_LOCATION, viewModel.state.value.alertStatus)
+        assertEquals("thane", viewModel.state.value.station?.id)
+
+        permissions.status = permissions.status.copy(backgroundLocation = true)
+        viewModel.onResume()
+        assertEquals(AlertStatus.ON, viewModel.state.value.alertStatus)
+
+        settings.update { it.copy(alertsEnabled = false) }
+        assertEquals(AlertStatus.OFF, viewModel.state.value.alertStatus)
+        assertEquals("thane", viewModel.state.value.station?.id)
+    }
+
+    @Test
+    fun `onboarding re-reads permissions and records that it was finished`() = runTest {
+        permissions.status = PermissionStatus(notifications = false, foregroundLocation = false, backgroundLocation = false)
+        val viewModel = OnboardingViewModel(permissions, settings)
+        assertFalse(viewModel.permissions.value.all)
+
+        permissions.status = PermissionStatus(notifications = true, foregroundLocation = true, backgroundLocation = true)
+        viewModel.refresh()
+        assertTrue(viewModel.permissions.value.all)
+
+        assertFalse(settings.current.onboardingDone)
+        viewModel.finish()
+        assertTrue(settings.current.onboardingDone)
+    }
 
     private fun detailViewModel(stationId: String) = StationDetailViewModel(
         SavedStateHandle(mapOf(StationDetailViewModel.STATION_ID_ARG to stationId)),

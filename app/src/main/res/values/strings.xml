@@ -13,7 +13,27 @@
     <string name="home_finding_station">Finding your station…</string>
     <string name="home_nearest_station">Nearest station · %1$s away</string>
     <string name="home_chosen_station">Chosen station</string>
-    <string name="home_alerts_not_set_up">Automatic alerts are not set up yet.</string>
+    <string name="action_fix">Fix</string>
+    <string name="alerts_on">Automatic alerts are on.</string>
+    <string name="alerts_off">Automatic alerts are switched off in settings.</string>
+    <string name="alerts_need_location">Alerts need location access.</string>
+    <string name="alerts_need_background">Alerts need location access all the time.</string>
+    <string name="alerts_need_notifications">Alerts need permission to show notifications.</string>
+
+    <string name="onboarding_title">Set up alerts</string>
+    <string name="onboarding_intro">Train Near Me tells you the next trains as you reach a station. It needs three permissions to do that by itself.</string>
+    <string name="onboarding_notifications_title">Notifications</string>
+    <string name="onboarding_notifications_reason">To show the next trains when you get near a station.</string>
+    <string name="onboarding_location_title">Location</string>
+    <string name="onboarding_location_reason">To find the station nearest to you. Your location never leaves your phone; only the station\'s code is sent to fetch its trains.</string>
+    <string name="onboarding_background_title">Location all the time</string>
+    <string name="onboarding_background_reason">Train Near Me uses your location in the background, even when the app is closed or not in use, to notice when you are near a railway station and notify you of the next trains. On the next screen choose \"Allow all the time\".</string>
+    <string name="onboarding_allow">Allow</string>
+    <string name="onboarding_allowed">Allowed</string>
+    <string name="onboarding_denied_hint">If a button does nothing, the permission was refused earlier. Open the app\'s settings to change it.</string>
+    <string name="onboarding_open_settings">Open app settings</string>
+    <string name="onboarding_done">Done</string>
+    <string name="onboarding_continue_without">Continue without alerts</string>
     <string name="home_next_trains">Next trains</string>
 
     <string name="distance_metres">%1$d m</string>

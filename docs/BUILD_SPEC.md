@@ -61,7 +61,7 @@ order, one at a time: "Do phase N of docs/BUILD_SPEC.md".
 | 3 | Departure repository | Done 2026-10-03. 28 unit tests pass in total. Room queries, the refresh worker and the app start-up have not run on a device |
 | 4 | Screens | Done 2026-10-04. 37 unit tests pass. On a phone (Android 16): home with a picked station and the picker seen working with live data. Not seen on the phone: station detail, nearest-station by location (needs the permission flow from phase 6), scheduled-only and unavailable states |
 | 5 | Settings | Done 2026-10-04. 46 unit tests pass, including persistence through a real DataStore file. Settings screen not yet seen on a phone. Alert settings (on/off, radius, sound, vibration) are stored but unused until phases 7 and 8 |
-| 6 | Permissions and onboarding | Not started |
+| 6 | Permissions and onboarding | Code done 2026-10-04. 49 unit tests pass. The manual matrix on a device (all granted; foreground only; denied; notifications denied) has not been run |
 | 7 | Geofencing | Not started |
 | 8 | Alert pipeline | Not started |
 | 9 | Riding suppression and high accuracy mode | Not started |

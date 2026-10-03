@@ -30,7 +30,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.trainnearme.core.permissions.AlertStatus
 import com.trainnearme.R
 import com.trainnearme.core.model.Station
 import com.trainnearme.ui.common.BoardUiState
@@ -44,9 +46,14 @@ fun HomeScreen(
     onOpenStation: (String) -> Unit,
     onChangeStation: () -> Unit,
     onOpenSettings: () -> Unit,
+    onFixAlerts: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    LifecycleResumeEffect(Unit) {
+        viewModel.onResume()
+        onPauseOrDispose { }
+    }
     val station = state.station
 
     Scaffold(
@@ -85,6 +92,9 @@ fun HomeScreen(
                     textAlign = TextAlign.Center,
                 )
                 Button(onClick = onChangeStation) { Text(stringResource(R.string.action_choose_station)) }
+                state.alertStatus?.let { status ->
+                    AlertStatusRow(status, onFixAlerts, Modifier.padding(top = 24.dp))
+                }
                 Credit(Modifier.padding(top = 32.dp))
             }
             else -> LazyColumn(Modifier.fillMaxSize().padding(padding)) {
@@ -95,6 +105,11 @@ fun HomeScreen(
                         onChangeStation = onChangeStation,
                         onUseNearest = viewModel::useNearest,
                     )
+                }
+                state.alertStatus?.let { status ->
+                    item(key = "alert-status") {
+                        AlertStatusRow(status, onFixAlerts, Modifier.padding(horizontal = 16.dp))
+                    }
                 }
                 item(key = "next-trains") {
                     Text(
@@ -151,12 +166,31 @@ private fun StationHeader(
                 TextButton(onClick = onUseNearest) { Text(stringResource(R.string.action_use_nearest)) }
             }
         }
+    }
+}
+
+/** One line saying whether automatic alerts will fire, with a way to fix it when they will not. */
+@Composable
+private fun AlertStatusRow(status: AlertStatus, onFix: () -> Unit, modifier: Modifier = Modifier) {
+    val needsPermission = status != AlertStatus.ON && status != AlertStatus.OFF
+    Row(modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
         Text(
-            stringResource(R.string.home_alerts_not_set_up),
-            Modifier.padding(top = 12.dp),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            stringResource(
+                when (status) {
+                    AlertStatus.ON -> R.string.alerts_on
+                    AlertStatus.OFF -> R.string.alerts_off
+                    AlertStatus.NEEDS_LOCATION -> R.string.alerts_need_location
+                    AlertStatus.NEEDS_BACKGROUND_LOCATION -> R.string.alerts_need_background
+                    AlertStatus.NEEDS_NOTIFICATIONS -> R.string.alerts_need_notifications
+                },
+            ),
+            Modifier.weight(1f),
+            style = MaterialTheme.typography.bodyMedium,
+            color = if (needsPermission) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
         )
+        if (needsPermission) {
+            TextButton(onClick = onFix) { Text(stringResource(R.string.action_fix)) }
+        }
     }
 }
 

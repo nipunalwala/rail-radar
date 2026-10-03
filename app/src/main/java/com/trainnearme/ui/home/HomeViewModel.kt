@@ -9,6 +9,9 @@ import com.trainnearme.core.domain.distanceTo
 import com.trainnearme.core.location.LocationProvider
 import com.trainnearme.core.model.Line
 import com.trainnearme.core.model.Station
+import com.trainnearme.core.permissions.AlertStatus
+import com.trainnearme.core.permissions.PermissionChecker
+import com.trainnearme.core.permissions.alertStatus
 import com.trainnearme.ui.common.BoardUiState
 import com.trainnearme.ui.common.loadBoardState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,8 +19,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -30,6 +33,8 @@ data class HomeUiState(
     /** Set when the station was found from the user's location rather than picked. */
     val distanceMetres: Int? = null,
     val board: BoardUiState = BoardUiState.Loading,
+    /** Null until settings have been read. */
+    val alertStatus: AlertStatus? = null,
 )
 
 @HiltViewModel
@@ -38,26 +43,41 @@ class HomeViewModel @Inject constructor(
     private val departures: DepartureRepository,
     private val location: LocationProvider,
     private val settings: SettingsRepository,
+    private val permissionChecker: PermissionChecker,
 ) : ViewModel() {
 
-    /** The settings that decide what the home screen shows. */
-    private data class Inputs(val pickedStationId: String?, val lines: Set<Line>, val trainCount: Int)
+    /** Everything that decides which station and trains the home screen shows. */
+    private data class Inputs(
+        val pickedStationId: String?,
+        val lines: Set<Line>,
+        val trainCount: Int,
+        val locationAllowed: Boolean,
+    )
 
-    private var inputs = Inputs(null, Line.entries.toSet(), 0)
+    private var inputs = Inputs(null, Line.entries.toSet(), 0, false)
+    private val permissions = MutableStateFlow(permissionChecker.current())
 
     private val _state = MutableStateFlow(HomeUiState())
     val state: StateFlow<HomeUiState> = _state.asStateFlow()
 
     init {
         viewModelScope.launch {
-            settings.settings
-                .map { Inputs(it.pickedStationId, it.lines, it.trainCount) }
-                .distinctUntilChanged()
-                .collectLatest {
-                    inputs = it
-                    showStation()
-                }
+            combine(settings.settings, permissions) { s, p ->
+                Inputs(s.pickedStationId, s.lines, s.trainCount, p.foregroundLocation)
+            }.distinctUntilChanged().collectLatest {
+                inputs = it
+                showStation()
+            }
         }
+        viewModelScope.launch {
+            combine(settings.settings, permissions) { s, p -> alertStatus(s.alertsEnabled, p) }
+                .collect { status -> _state.update { it.copy(alertStatus = status) } }
+        }
+    }
+
+    /** Permissions may have changed while the screen was away. */
+    fun onResume() {
+        permissions.value = permissionChecker.current()
     }
 
     fun refresh() {
@@ -73,21 +93,32 @@ class HomeViewModel @Inject constructor(
     }
 
     private suspend fun showStation() {
-        _state.value = HomeUiState(resolving = true)
+        show(resolving = true, station = null, distanceMetres = null)
         val picked = inputs.pickedStationId?.let { stations.byId(it) }
         if (picked != null) {
-            _state.value = HomeUiState(resolving = false, station = picked)
+            show(resolving = false, station = picked, distanceMetres = null)
             loadBoard(picked.id)
             return
         }
         val here = location.current()
         val nearest = here?.let { stations.nearest(it.lat, it.lng, inputs.lines) }
-        _state.value = HomeUiState(
+        show(
             resolving = false,
             station = nearest,
             distanceMetres = nearest?.distanceTo(here.lat, here.lng)?.roundToInt(),
         )
         if (nearest != null) loadBoard(nearest.id)
+    }
+
+    private fun show(resolving: Boolean, station: Station?, distanceMetres: Int?) {
+        _state.update {
+            it.copy(
+                resolving = resolving,
+                station = station,
+                distanceMetres = distanceMetres,
+                board = BoardUiState.Loading,
+            )
+        }
     }
 
     private suspend fun loadBoard(stationId: String) {

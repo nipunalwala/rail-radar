@@ -9,6 +9,8 @@ data class Settings(
     val lines: Set<Line> = Line.entries.toSet(),
     /** Station chosen by hand on the home screen, or null to follow location. */
     val pickedStationId: String? = null,
+    /** True once the user has been through the permissions screen. */
+    val onboardingDone: Boolean = false,
 ) {
     /** Brings out-of-range values back into range; at least one line stays monitored. */
     fun sanitised(): Settings = copy(
