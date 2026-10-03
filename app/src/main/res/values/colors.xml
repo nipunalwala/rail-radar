@@ -1,3 +1,4 @@
 <resources>
     <color name="launcher_background">#1A4D8F</color>
+    <color name="window_background">#F9F9FF</color>
 </resources>

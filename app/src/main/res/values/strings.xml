@@ -44,6 +44,7 @@
     <string name="line_harbour">Harbour</string>
 
     <string name="board_scheduled_only">Scheduled times. Live data is unavailable.</string>
+    <string name="board_live_as_of">Live times · updated %1$s</string>
     <string name="board_unavailable">Train data is unavailable. Check your connection and refresh.</string>
     <string name="board_empty">No local trains in the next two hours.</string>
     <string name="board_failed">Could not load trains.</string>

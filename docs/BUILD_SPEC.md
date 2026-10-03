@@ -67,6 +67,9 @@ order, one at a time: "Do phase N of docs/BUILD_SPEC.md".
 | 9 | Riding suppression and high accuracy mode | Code done 2026-10-04. 81 unit tests pass. Deviation: suppression uses arrival from a neighbouring station, not raw speed or Activity Recognition (see ARCHITECTURE.md 6.4). The foreground service has never been started on a device, and no real train ride has been tested |
 | 10 | Failure handling and quota | Code done 2026-10-04. 92 unit tests pass, including the provider run against a local web server for 429, 401, 403 and 503. A 429 stops all requests until the next day and boards fall back to the saved timetable; a rejected key shows a notice on the home screen. Requests are counted per month and shown on a debug-only diagnostics screen. Background audit: the only periodic work is the daily refresh of stale saved timetables; nothing polls live data. Not checked on a device: the notices and the diagnostics screen, and a real 429 from RailRadar has never been seen, so its status code is assumed |
 | 11 | Field test and tuning | **Waiting on real journeys.** Prepared 2026-10-04: test sheet in [FIELD_TEST.md](FIELD_TEST.md), and the event log now records why an alert was held back. No journey has been made, so the results table below is empty and no default has been tuned |
+| 13 | UI: design foundation | Code done 2026-10-04. Builds, 92 tests pass. Fixed light and dark colour scheme, status and line colours, shared components, departure rows as cards. The line colours are the app's own choice, not the railway's. Not looked at on a device |
+| 14 | UI: home and station page | Not started |
+| 15 | UI: picker, settings, onboarding, diagnostics | Not started |
 | 12 | Pre-release | Partly done 2026-10-04. Done: release builds carry no key and talk to a proxy (checked by searching the unpacked release APK; the debug APK as a control does contain it), R8 on, launcher icon, signing read from `local.properties`, proxy source in `server/proxy` with 13 passing tests, privacy policy draft, Play declaration text. **Not done, needs the owner:** deploying the proxy, creating the signing key, hosting the privacy policy, the Play Console forms. The release build has never been run on a device and the proxy has never been deployed. See [PLAY_RELEASE.md](PLAY_RELEASE.md) |
 
 ---
@@ -307,6 +310,57 @@ as written.
   location declaration.
 
 **Acceptance.** Release build contains no API key; decompiling confirms it.
+
+## UI phases (13 to 15)
+
+**Rules for all three.** Only files under `ui/`, `res/` and the theme change.
+No ViewModel, repository, domain, provider or proximity code is touched, no
+string that a notification uses is reworded, and every action a screen offers
+today is still offered. The unit tests must pass unchanged. Icons come from
+`material-icons-core` only, so no dependency is added.
+
+### Phase 13: Design foundation
+
+**Prompt.** Give the app one visual language. Replace the wallpaper-derived
+colours with a fixed scheme built on the launcher icon's blue, in light and
+dark, with named colours for on time, slightly late, late and for each railway
+line. Make the window theme follow dark mode so there is no white flash on
+start. Add the shared pieces the screens need to `ui/common`: line chips, a
+platform badge, a notice card with an optional action, a section header and an
+empty state. Then rebuild the departure row with them: destination, platform
+badge and a colour-coded status on the left, minutes large on the right with the
+clock time under it, and a line saying whether times are live or scheduled.
+
+**Acceptance.** Builds, tests pass, every board state (loading, failed,
+unavailable, empty, scheduled only, live) still has a row.
+
+### Phase 14: Home and station page
+
+**Prompt.** Rebuild the home screen around the station: a hero card with how the
+station was chosen, its name, its line chips and the change/use nearest
+actions; alert status as a quiet line when alerts work and as a notice card with
+the Fix action when they do not; data source problems as a notice card; the
+board; "See all trains". Add pull to refresh on home and on the station page,
+calling the existing refresh. Give the no-station and finding-station states an
+icon and clear hierarchy. On the station page show line chips under the name and
+make Refresh an icon.
+
+**Acceptance.** Builds, tests pass, each of the home screen's existing actions
+(refresh, settings, change station, use nearest, fix alerts, see all trains) is
+still reachable.
+
+### Phase 15: Picker, settings, onboarding, diagnostics
+
+**Prompt.** Picker: search field with a search icon and a clear button, rows with
+line chips, an empty state. Settings: sections as cards with icons, values shown
+beside sliders, line colours beside the line names, the same rule that the last
+line cannot be switched off. Onboarding: a short header, one card per
+permission with an icon and a clear allowed state, the same order and the same
+permission requests, the same wording for background location (Play requires
+it). Diagnostics: the same information in cards.
+
+**Acceptance.** Builds, tests pass, permission requests and settings behave as
+before.
 
 ---
 

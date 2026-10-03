@@ -1,3 +1,7 @@
 <resources>
-    <style name="Theme.TrainNearMe" parent="android:Theme.Material.Light.NoActionBar" />
+    <!-- Only seen for a moment before Compose draws: the background matches the
+         app's own so there is no flash. -->
+    <style name="Theme.TrainNearMe" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/window_background</item>
+    </style>
 </resources>
