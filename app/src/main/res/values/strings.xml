@@ -61,6 +61,17 @@
     <string name="train_departed">Just left</string>
     <string name="train_running">Running</string>
     <string name="train_no_live">No live position</string>
+    <string name="train_number">Train %1$s</string>
+    <string name="train_at">At %1$s</string>
+    <string name="train_left">Left %1$s</string>
+    <string name="train_left_next">Left %1$s · next stop %2$s</string>
+    <string name="train_finished">Finished its run at %1$s</string>
+    <string name="train_updated">updated %1$s</string>
+    <string name="train_already_left">This train has already left %1$s.</string>
+    <string name="train_stops">Stops</string>
+    <string name="train_your_station">This station</string>
+    <string name="train_position_failed">Could not find where this train is.</string>
+    <string name="action_try_again">Try again</string>
     <string name="board_on_time">On time</string>
     <string name="board_scheduled">Scheduled</string>
 

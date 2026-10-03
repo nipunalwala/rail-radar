@@ -3,6 +3,9 @@ package com.trainnearme.provider.railradar
 import com.trainnearme.core.model.Departure
 import com.trainnearme.core.model.DepartureStatus
 import com.trainnearme.core.model.ScheduledDeparture
+import com.trainnearme.core.model.StopState
+import com.trainnearme.core.model.TrainPosition
+import com.trainnearme.core.model.TrainStop
 import com.trainnearme.core.model.TrainType
 import java.time.DayOfWeek
 import java.time.Instant
@@ -62,6 +65,36 @@ internal fun TimetableEntryDto.toScheduledDeparture(): ScheduledDeparture? {
         originName = train.source?.name.orEmpty(),
     )
 }
+
+internal fun TrainLiveDto.toTrainPosition() = TrainPosition(
+    trainNumber = trainNumber,
+    trainName = trainName,
+    finished = status == "completed",
+    isLive = isLive,
+    updatedAt = lastUpdatedAt?.toInstantOrNull(),
+    delayMinutes = delayMinutes,
+    currentCode = currentLocation?.stationCode.orEmpty(),
+    currentName = currentLocation?.stationName.orEmpty(),
+    atCurrent = currentLocation?.status == "at-station",
+    nextCode = nextHalt?.stationCode.orEmpty(),
+    nextName = nextHalt?.stationName.orEmpty(),
+    stops = route.map { it.toTrainStop() },
+)
+
+// A stop's times are those of leaving it; the last stop has only an arrival.
+private fun RouteStopDto.toTrainStop() = TrainStop(
+    code = stationCode,
+    name = stationName,
+    scheduled = (scheduledDeparture ?: scheduledArrival)?.toInstantOrNull(),
+    actual = (actualDeparture ?: actualArrival)?.toInstantOrNull(),
+    delayMinutes = delayDeparture ?: delayArrival,
+    platform = platform?.takeIf { it.isNotBlank() },
+    state = when (status) {
+        "departed" -> StopState.PASSED
+        "at-station" -> StopState.CURRENT
+        else -> StopState.AHEAD
+    },
+)
 
 private fun String.toTrainType(): TrainType =
     if (uppercase() in LOCAL_TYPES) TrainType.LOCAL else TrainType.EXPRESS

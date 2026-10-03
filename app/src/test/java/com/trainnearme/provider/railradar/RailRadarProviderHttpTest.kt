@@ -62,6 +62,16 @@ class RailRadarProviderHttpTest {
     }
 
     @Test
+    fun `train position is requested from the documented path and parsed`() = runBlocking {
+        server.enqueue(MockResponse().setBody(fixture("train_live_91006.json")))
+
+        val position = provider.trainPosition("91006")
+
+        assertEquals("Churchgate", position.currentName)
+        assertEquals("/v1/trains/91006/live?haltsOnly=true", server.takeRequest().path)
+    }
+
+    @Test
     fun `429 becomes a rate limit`() {
         server.enqueue(MockResponse().setResponseCode(429).setBody("""{"success":false}"""))
 

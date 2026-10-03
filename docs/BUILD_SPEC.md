@@ -70,6 +70,7 @@ order, one at a time: "Do phase N of docs/BUILD_SPEC.md".
 | 13 | UI: design foundation | Code done 2026-10-04. Builds, 92 tests pass. Fixed light and dark colour scheme, status and line colours, shared components, departure rows as cards. The line colours are the app's own choice, not the railway's. Not looked at on a device |
 | 14 | UI: home and station page | Code done 2026-10-04. Builds, 92 tests pass. Station hero card, alert status as a quiet line or a notice with Fix, pull to refresh on both screens, placeholder rows while loading. No ViewModel changed. Not looked at on a device |
 | 15 | UI: picker, settings, onboarding, diagnostics | Code done 2026-10-04. Builds, 92 tests pass. Search field with clear button and line chips in the picker, settings grouped in cards, permission cards with icons and a clear allowed state, same permission requests and wording. Not looked at on a device |
+| 16 | Train position on tap | Code done 2026-10-04. 103 app tests and 14 proxy tests pass. Tapping a train opens a sheet with its position, delay and stops, from one `GET /v1/trains/{number}/live` request, cached for 60 seconds. The mapper is tested against a response recorded for local 91006. Only a finished run was recorded, so a train between two stations and a stop still ahead have not been seen from the real API: stop statuses other than `departed` and `at-station` are assumed to mean "ahead" |
 | 12 | Pre-release | Partly done 2026-10-04. Done: release builds carry no key and talk to a proxy (checked by searching the unpacked release APK; the debug APK as a control does contain it), R8 on, launcher icon, signing read from `local.properties`, proxy source in `server/proxy` with 13 passing tests, privacy policy draft, Play declaration text. **Not done, needs the owner:** deploying the proxy, creating the signing key, hosting the privacy policy, the Play Console forms. The release build has never been run on a device and the proxy has never been deployed. See [PLAY_RELEASE.md](PLAY_RELEASE.md) |
 
 ---
@@ -361,6 +362,32 @@ it). Diagnostics: the same information in cards.
 
 **Acceptance.** Builds, tests pass, permission requests and settings behave as
 before.
+
+## Phase 16: Train position on tap
+
+**Goal.** Tapping a train on a board shows where that train actually is.
+
+**Why on tap.** The station board only gives a stage (on its way, at the
+platform). RailRadar's `GET /v1/trains/{number}/live` gives the real position,
+but costs one request per train, so it is fetched only when the user asks.
+
+**Prompt.** Add `trainPosition(trainNumber)` to `TrainDataProvider` and
+implement it for RailRadar with `haltsOnly=true`. It goes through
+`GuardedProvider` like every other request. `DepartureRepository` caches a
+position for 60 seconds, so tapping the same train again costs nothing, and
+spells station names the app's own way. Tapping a departure row on the home
+screen or the station page opens a bottom sheet with: the route and train
+number; where the train is now (at a station, or left one and heading for the
+next, or finished its run), its delay and when that was last updated; a notice
+if it has already left the station whose board was tapped; and the list of
+stops with scheduled and actual times, the current stop and the user's station
+picked out. Loading and failure states, with a retry. Nothing is fetched until a
+row is tapped. The proxy serves the new path for suburban train numbers only.
+
+**Acceptance.** Mapper test against a recorded response; repository test that a
+second tap inside 60 seconds makes no request and that a failure gives null;
+ViewModel test for loading, loaded, failed, retry and close; proxy tests for the
+new path. No test calls the live API.
 
 ---
 

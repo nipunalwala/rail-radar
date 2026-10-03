@@ -38,6 +38,7 @@ import com.trainnearme.core.model.Departure
 import com.trainnearme.core.model.DepartureBoard
 import com.trainnearme.core.model.DepartureStatus
 import com.trainnearme.core.model.Line
+import com.trainnearme.core.model.Station
 import com.trainnearme.ui.theme.statusColors
 import kotlinx.coroutines.CancellationException
 import java.time.Duration
@@ -74,7 +75,7 @@ private const val LATE_MINUTES = 5
 private const val PLACEHOLDER_ROWS = 3
 
 /** Rows for a departure board, for use inside a LazyColumn. */
-fun LazyListScope.boardItems(state: BoardUiState) {
+fun LazyListScope.boardItems(state: BoardUiState, onTrainClick: (Departure, Station) -> Unit) {
     when (state) {
         BoardUiState.Loading -> items(PLACEHOLDER_ROWS, key = { "board-loading-$it" }) { PlaceholderRow() }
         BoardUiState.Failed -> item(key = "board-failed") {
@@ -92,7 +93,7 @@ fun LazyListScope.boardItems(state: BoardUiState) {
                 else -> {
                     item(key = "board-source") { SourceLine(board.source, board.asOf) }
                     items(board.departures, key = { "train-${it.trainNumber}" }) { departure ->
-                        DepartureRow(departure, board.asOf)
+                        DepartureRow(departure, board.asOf, onClick = { onTrainClick(departure, board.station) })
                     }
                 }
             }
@@ -129,13 +130,15 @@ private fun BoardMessage(icon: ImageVector, text: String) {
 }
 
 @Composable
-private fun BoardCard(content: @Composable () -> Unit) {
-    Surface(
-        Modifier.fillMaxWidth().padding(horizontal = ScreenPadding, vertical = 4.dp),
-        shape = MaterialTheme.shapes.medium,
-        color = MaterialTheme.colorScheme.surfaceContainerLow,
-        content = content,
-    )
+private fun BoardCard(onClick: (() -> Unit)? = null, content: @Composable () -> Unit) {
+    val modifier = Modifier.fillMaxWidth().padding(horizontal = ScreenPadding, vertical = 4.dp)
+    val shape = MaterialTheme.shapes.medium
+    val color = MaterialTheme.colorScheme.surfaceContainerLow
+    if (onClick != null) {
+        Surface(onClick = onClick, modifier = modifier, shape = shape, color = color, content = content)
+    } else {
+        Surface(modifier = modifier, shape = shape, color = color, content = content)
+    }
 }
 
 /** Stands in for a departure while the board loads, so the list does not jump. */
@@ -159,12 +162,12 @@ private fun PlaceholderRow() {
  * to end, then platform and delay. Right: minutes until it leaves, and the time.
  */
 @Composable
-private fun DepartureRow(departure: Departure, now: Instant) {
+private fun DepartureRow(departure: Departure, now: Instant, onClick: () -> Unit) {
     val leavesAt = departure.effectiveTime(now)
     val minutes = Duration.between(now, leavesAt).toMinutes().coerceAtLeast(0)
     val delay = delayLabel(departure)
 
-    BoardCard {
+    BoardCard(onClick = onClick) {
         Row(
             Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically,

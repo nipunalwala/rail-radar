@@ -52,6 +52,17 @@ test("a repeat request is answered from the cache", async () => {
   assert.equal(counts.get("2026-10"), 1);
 });
 
+test("a suburban train's position is fetched and cached for a minute", async () => {
+  const { calls, stored, get } = setup();
+
+  assert.equal((await get("/v1/trains/91006/live?haltsOnly=true")).status, 200);
+  await get("/v1/trains/91006/live");
+
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0].url, "https://api.railradar.in/v1/trains/91006/live?haltsOnly=true");
+  assert.equal([...stored.values()][0].ttl, LIVE_TTL_SECONDS);
+});
+
 test("a timetable is cached for a day", async () => {
   const { stored, get } = setup();
 
@@ -75,6 +86,9 @@ test("anything the app does not ask for is refused without an upstream request",
     "/",
     "/v1/lookup/stations",
     "/v1/trains/12951",
+    "/v1/trains/12951/live", // not a suburban train
+    "/v1/trains/91006/route",
+    "/v1/trains/910066/live",
     "/v1/stations/NDLS/live?hours=2", // not a Mumbai suburban station
     "/v1/stations/dr/live?hours=2",
     "/v1/stations/DR/live?hours=24",

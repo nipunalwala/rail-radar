@@ -69,6 +69,8 @@ class GuardedProviderTest {
         delegate.failure = null
         assertTrue(fails { provider.liveBoard("DR", 2) } is ProviderRateLimitedException)
         assertTrue(fails { provider.timetable("DR") } is ProviderRateLimitedException)
+        assertTrue(fails { provider.trainPosition("91006") } is ProviderRateLimitedException)
+        assertTrue(delegate.positionCalls.isEmpty())
         assertEquals(1, delegate.liveCalls.size)
         assertTrue(delegate.timetableCalls.isEmpty())
         assertEquals(1, health.current.requestCount)

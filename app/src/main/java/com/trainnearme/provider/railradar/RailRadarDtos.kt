@@ -78,3 +78,45 @@ data class TimetableStopDto(
     val departure: String? = null,
     val departureDay: Int? = null,
 )
+
+// GET /v1/trains/{number}/live
+
+@Serializable
+data class TrainLiveDto(
+    val trainNumber: String = "",
+    val trainName: String = "",
+    val status: String = "",
+    val isLive: Boolean = false,
+    val lastUpdatedAt: String? = null,
+    val delayMinutes: Int? = null,
+    val currentLocation: TrainLocationDto? = null,
+    val nextHalt: TrainHaltDto? = null,
+    val route: List<RouteStopDto> = emptyList(),
+)
+
+@Serializable
+data class TrainLocationDto(
+    val stationCode: String = "",
+    val stationName: String = "",
+    val status: String = "",
+)
+
+@Serializable
+data class TrainHaltDto(
+    val stationCode: String = "",
+    val stationName: String = "",
+)
+
+@Serializable
+data class RouteStopDto(
+    val stationCode: String = "",
+    val stationName: String = "",
+    val status: String = "",
+    val scheduledArrival: String? = null,
+    val scheduledDeparture: String? = null,
+    val actualArrival: String? = null,
+    val actualDeparture: String? = null,
+    val delayArrival: Int? = null,
+    val delayDeparture: Int? = null,
+    val platform: String? = null,
+)

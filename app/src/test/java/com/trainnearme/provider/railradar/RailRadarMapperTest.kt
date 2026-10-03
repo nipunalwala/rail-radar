@@ -4,6 +4,7 @@ import com.trainnearme.core.domain.effectiveTime
 import com.trainnearme.core.domain.upcomingDepartures
 import com.trainnearme.core.model.Departure
 import com.trainnearme.core.model.DepartureStatus
+import com.trainnearme.core.model.StopState
 import com.trainnearme.core.model.TrainType
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -73,6 +74,39 @@ class RailRadarMapperTest {
         val times = upcoming.map { it.effectiveTime(recordedAt) }
         assertEquals(times.sorted(), times)
         assertEquals(OffsetDateTime.parse("2026-10-03T23:02:00+05:30").toInstant(), times.first())
+    }
+
+    @Test
+    fun `train position maps where the train is and its stops`() {
+        val position = RailRadarProvider.json
+            .decodeFromString<EnvelopeDto<TrainLiveDto>>(fixture("train_live_91006.json"))
+            .data!!.toTrainPosition()
+
+        assertEquals("91006", position.trainNumber)
+        assertTrue(position.finished)
+        assertTrue(position.isLive)
+        assertEquals("CCG", position.currentCode)
+        assertEquals("Churchgate", position.currentName)
+        assertTrue(position.atCurrent)
+        assertEquals("", position.nextCode)
+        assertEquals(40, position.delayMinutes)
+        assertEquals(OffsetDateTime.parse("2026-10-04T01:22:24+05:30").toInstant(), position.updatedAt)
+
+        assertEquals(16, position.stops.size)
+        val first = position.stops.first()
+        assertEquals("VR", first.code)
+        assertEquals(StopState.PASSED, first.state)
+        assertEquals(OffsetDateTime.parse("2026-10-03T23:15:00+05:30").toInstant(), first.scheduled)
+        assertEquals(OffsetDateTime.parse("2026-10-03T23:22:00+05:30").toInstant(), first.actual)
+        assertEquals(7, first.delayMinutes)
+        assertEquals("2", first.platform)
+
+        // The last stop has no departure, so its arrival is used.
+        val last = position.stops.last()
+        assertEquals(StopState.CURRENT, last.state)
+        assertEquals(OffsetDateTime.parse("2026-10-04T00:42:00+05:30").toInstant(), last.scheduled)
+        assertEquals(OffsetDateTime.parse("2026-10-04T01:22:24+05:30").toInstant(), last.actual)
+        assertEquals(40, last.delayMinutes)
     }
 
     @Test

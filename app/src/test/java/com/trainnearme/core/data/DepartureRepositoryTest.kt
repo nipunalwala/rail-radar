@@ -5,6 +5,9 @@ import com.trainnearme.core.model.BoardSource
 import com.trainnearme.core.model.Departure
 import com.trainnearme.core.model.DepartureStatus
 import com.trainnearme.core.model.ScheduledDeparture
+import com.trainnearme.core.model.StopState
+import com.trainnearme.core.model.TrainPosition
+import com.trainnearme.core.model.TrainStop
 import com.trainnearme.core.model.TrainType
 import com.trainnearme.testing.FakeProvider
 import com.trainnearme.testing.FakeStationDao
@@ -91,6 +94,59 @@ class DepartureRepositoryTest {
         originCode = "PNVL",
         originName = "PNVL",
     )
+
+    private fun position(number: String) = TrainPosition(
+        trainNumber = number,
+        trainName = "Local",
+        finished = false,
+        isLive = true,
+        updatedAt = now,
+        delayMinutes = 3,
+        currentCode = "DR",
+        currentName = "Dadar Central",
+        atCurrent = false,
+        nextCode = "TNA",
+        nextName = "Thane Jn",
+        stops = listOf(
+            TrainStop("DR", "Dadar Central", now, now, 3, "1", StopState.PASSED),
+            TrainStop("XX", "Somewhere Else", null, null, null, null, StopState.AHEAD),
+            TrainStop("TNA", "Thane Jn", null, null, null, null, StopState.AHEAD),
+        ),
+    )
+
+    @Test
+    fun `train position spells stations the app's way`() = runTest {
+        provider.positions["1"] = position("1")
+
+        val found = repository.trainPosition("1")!!
+
+        assertEquals("Dadar", found.currentName)
+        assertEquals("Thane", found.nextName)
+        // A station outside the app's list keeps the provider's name.
+        assertEquals(listOf("Dadar", "Somewhere Else", "Thane"), found.stops.map { it.name })
+    }
+
+    @Test
+    fun `asking for the same train again within a minute makes no request`() = runTest {
+        provider.positions["1"] = position("1")
+
+        repository.trainPosition("1")
+        now = now.plusSeconds(30)
+        repository.trainPosition("1")
+        assertEquals(listOf("1"), provider.positionCalls)
+
+        now = now.plusSeconds(60)
+        repository.trainPosition("1")
+        assertEquals(listOf("1", "1"), provider.positionCalls)
+    }
+
+    @Test
+    fun `train position is null when it cannot be fetched and is not remembered`() = runTest {
+        assertNull(repository.trainPosition("1"))
+
+        provider.positions["1"] = position("1")
+        assertEquals("Dadar", repository.trainPosition("1")!!.currentName)
+    }
 
     @Test
     fun `unknown station returns null`() = runTest {

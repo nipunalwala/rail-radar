@@ -14,6 +14,12 @@ interface RailRadarApi {
     @GET("v1/stations/{code}/trains")
     suspend fun timetable(@Path("code") code: String): EnvelopeDto<TimetableDto>
 
+    @GET("v1/trains/{number}/live")
+    suspend fun trainLive(
+        @Path("number") number: String,
+        @Query("haltsOnly") haltsOnly: Boolean,
+    ): EnvelopeDto<TrainLiveDto>
+
     companion object {
         const val BASE_URL = "https://api.railradar.in/"
     }

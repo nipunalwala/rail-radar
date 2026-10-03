@@ -3,11 +3,13 @@
 A Cloudflare Worker that sits between the app and RailRadar so that release
 builds of the app carry no API key.
 
-It serves exactly the two requests the app makes, with RailRadar's own paths and
+It serves exactly the three requests the app makes, with RailRadar's own paths and
 response bodies:
 
 - `GET /v1/stations/{code}/live?hours=N` (N from 1 to 4), cached for 60 seconds
 - `GET /v1/stations/{code}/trains`, cached for 24 hours
+- `GET /v1/trains/{number}/live`, for five-digit train numbers starting with 9
+  (suburban trains) only, cached for 60 seconds
 
 Everything else is refused. Station codes are limited to the ones in the app's
 station list (`src/codes.json`), so the key cannot be used for other stations.

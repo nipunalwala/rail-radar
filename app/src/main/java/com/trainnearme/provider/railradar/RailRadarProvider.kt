@@ -5,6 +5,7 @@ import com.trainnearme.core.data.ProviderUnauthorizedException
 import com.trainnearme.core.data.TrainDataProvider
 import com.trainnearme.core.model.Departure
 import com.trainnearme.core.model.ScheduledDeparture
+import com.trainnearme.core.model.TrainPosition
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -23,6 +24,9 @@ class RailRadarProvider @Inject constructor(
 
     override suspend fun liveBoard(stationCode: String, hoursAhead: Int): List<Departure> =
         request { api.liveBoard(stationCode, hoursAhead) }.trains.mapNotNull { it.toDeparture() }
+
+    override suspend fun trainPosition(trainNumber: String): TrainPosition =
+        request { api.trainLive(trainNumber, haltsOnly = true) }.toTrainPosition()
 
     /** Turns the HTTP statuses the app reacts to into the provider-neutral exceptions. */
     private suspend fun <T> request(call: suspend () -> EnvelopeDto<T>): T {

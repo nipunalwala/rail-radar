@@ -1,6 +1,6 @@
 // The proxy's logic, kept free of Cloudflare APIs so it can be tested with node.
 //
-// It forwards the two RailRadar requests the app makes, adds the API key, and
+// It forwards the three RailRadar requests the app makes, adds the API key, and
 // answers repeat requests from a cache so that many phones near the same
 // station cost one upstream request.
 
@@ -12,6 +12,8 @@ export const LIMITED_TTL_SECONDS = 10 * 60;
 export const MAX_HOURS = 4;
 
 const PATH = /^\/v1\/stations\/([A-Z]{2,5})\/(live|trains)$/;
+// Mumbai suburban train numbers have five digits and start with 9.
+const TRAIN_PATH = /^\/v1\/trains\/(9\d{4})\/live$/;
 
 function json(status, body, headers = {}) {
   return new Response(JSON.stringify(body), {
@@ -27,6 +29,9 @@ const refuse = (status, message) => json(status, { success: false, error: messag
  * request is not one the app makes.
  */
 export function plan(url, allowedCodes) {
+  const train = TRAIN_PATH.exec(url.pathname);
+  if (train) return { path: `/v1/trains/${train[1]}/live?haltsOnly=true`, ttl: LIVE_TTL_SECONDS };
+
   const match = PATH.exec(url.pathname);
   if (!match) return null;
   const [, code, kind] = match;

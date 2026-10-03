@@ -29,14 +29,18 @@ import com.trainnearme.ui.common.BoardPullToRefresh
 import com.trainnearme.ui.common.LineChips
 import com.trainnearme.ui.common.ScreenPadding
 import com.trainnearme.ui.common.boardItems
+import com.trainnearme.ui.train.TrainSheet
+import com.trainnearme.ui.train.TrainSheetViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StationDetailScreen(
     onBack: () -> Unit,
     viewModel: StationDetailViewModel = hiltViewModel(),
+    trainSheet: TrainSheetViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    TrainSheet(trainSheet)
 
     Scaffold(
         topBar = {
@@ -78,7 +82,7 @@ fun StationDetailScreen(
                         LineChips(station, Modifier.padding(horizontal = ScreenPadding).padding(bottom = 8.dp))
                     }
                 }
-                boardItems(state.board)
+                boardItems(state.board, trainSheet::open)
             }
         }
     }

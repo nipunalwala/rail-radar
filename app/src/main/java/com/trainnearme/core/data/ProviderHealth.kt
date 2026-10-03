@@ -10,6 +10,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import com.trainnearme.core.domain.MUMBAI_ZONE
 import com.trainnearme.core.model.Departure
 import com.trainnearme.core.model.ScheduledDeparture
+import com.trainnearme.core.model.TrainPosition
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -58,6 +59,9 @@ class GuardedProvider(
 
     override suspend fun liveBoard(stationCode: String, hoursAhead: Int): List<Departure> =
         guarded { delegate.liveBoard(stationCode, hoursAhead) }
+
+    override suspend fun trainPosition(trainNumber: String): TrainPosition =
+        guarded { delegate.trainPosition(trainNumber) }
 
     private suspend fun <T> guarded(request: suspend () -> T): T {
         val at = now()

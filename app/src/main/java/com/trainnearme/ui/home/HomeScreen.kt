@@ -58,6 +58,8 @@ import com.trainnearme.ui.common.SectionHeader
 import com.trainnearme.ui.common.boardItems
 import com.trainnearme.ui.common.distanceLabel
 import com.trainnearme.ui.theme.statusColors
+import com.trainnearme.ui.train.TrainSheet
+import com.trainnearme.ui.train.TrainSheetViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -67,6 +69,7 @@ fun HomeScreen(
     onOpenSettings: () -> Unit,
     onFixAlerts: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
+    trainSheet: TrainSheetViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     LifecycleResumeEffect(Unit) {
@@ -74,6 +77,7 @@ fun HomeScreen(
         onPauseOrDispose { }
     }
     val station = state.station
+    TrainSheet(trainSheet)
 
     Scaffold(
         topBar = {
@@ -172,7 +176,7 @@ fun HomeScreen(
                         }
                     }
                     item(key = "next-trains") { SectionHeader(stringResource(R.string.home_next_trains)) }
-                    boardItems(state.board)
+                    boardItems(state.board, trainSheet::open)
                     if (state.board is BoardUiState.Loaded) {
                         item(key = "see-all") {
                             TextButton(

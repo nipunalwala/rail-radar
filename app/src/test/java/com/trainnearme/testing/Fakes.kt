@@ -18,6 +18,7 @@ import com.trainnearme.core.location.LatLng
 import com.trainnearme.core.location.LocationProvider
 import com.trainnearme.core.model.Departure
 import com.trainnearme.core.model.ScheduledDeparture
+import com.trainnearme.core.model.TrainPosition
 import com.trainnearme.core.domain.StationAlertState
 import com.trainnearme.proximity.AlertScheduler
 import com.trainnearme.proximity.AlertStateStore
@@ -70,6 +71,14 @@ class FakeProvider : TrainDataProvider {
     var failure: Exception? = null
     val liveCalls = mutableListOf<String>()
     val timetableCalls = mutableListOf<String>()
+    val positions = mutableMapOf<String, TrainPosition>()
+    val positionCalls = mutableListOf<String>()
+
+    override suspend fun trainPosition(trainNumber: String): TrainPosition {
+        positionCalls += trainNumber
+        failure?.let { throw it }
+        return positions[trainNumber] ?: throw IOException("no such train")
+    }
 
     override suspend fun timetable(stationCode: String): List<ScheduledDeparture> {
         timetableCalls += stationCode

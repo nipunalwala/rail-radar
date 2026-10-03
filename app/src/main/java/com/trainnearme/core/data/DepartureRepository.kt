@@ -13,6 +13,7 @@ import com.trainnearme.core.model.Departure
 import com.trainnearme.core.model.DepartureBoard
 import com.trainnearme.core.model.Line
 import com.trainnearme.core.model.ScheduledDeparture
+import com.trainnearme.core.model.TrainPosition
 import com.trainnearme.core.model.TrainType
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.async
@@ -37,8 +38,11 @@ class DepartureRepository(
     private class CachedLive(val fetchedAt: Instant, val departures: List<Departure>)
     private class CodeData(val timetable: List<ScheduledDeparture>?, val live: List<Departure>?)
 
+    private class CachedPosition(val fetchedAt: Instant, val position: TrainPosition)
+
     private val liveCacheLock = Mutex()
     private val liveCache = HashMap<String, CachedLive>()
+    private val positionCache = HashMap<String, CachedPosition>()
 
     /**
      * Null when [stationId] is unknown. Only the station's codes that serve
@@ -85,6 +89,33 @@ class DepartureRepository(
             else -> BoardSource.UNAVAILABLE
         }
         return DepartureBoard(station, upcomingDepartures(merged, at, count, localsOnly), source, at)
+    }
+
+    /**
+     * Where a train is now. Costs one request, so it is asked for only when the
+     * user taps a train; asking again within a minute costs nothing. Null when
+     * it cannot be fetched.
+     */
+    suspend fun trainPosition(trainNumber: String): TrainPosition? {
+        val at = now()
+        liveCacheLock.withLock {
+            positionCache[trainNumber]
+                ?.takeIf { Duration.between(it.fetchedAt, at) < LIVE_CACHE_TTL }
+                ?.let { return it.position }
+        }
+        val fetched = withTimeoutOrNull(POSITION_TIMEOUT.toMillis()) {
+            orNullOnFailure { provider.trainPosition(trainNumber) }
+        } ?: return null
+
+        // As on the board, a station is spelt the app's own way where it is known.
+        val names = stations.all().flatMap { s -> s.providerCodes.map { it to s.name } }.toMap()
+        val position = fetched.copy(
+            currentName = names[fetched.currentCode] ?: fetched.currentName,
+            nextName = names[fetched.nextCode] ?: fetched.nextName,
+            stops = fetched.stops.map { it.copy(name = names[it.code] ?: it.name) },
+        )
+        liveCacheLock.withLock { positionCache[trainNumber] = CachedPosition(at, position) }
+        return position
     }
 
     /** Re-fetches every cached timetable older than [maxAge]. Returns how many were refreshed. */
@@ -149,5 +180,6 @@ class DepartureRepository(
         val LIVE_TIMEOUT: Duration = Duration.ofSeconds(4)
         val LIVE_CACHE_TTL: Duration = Duration.ofSeconds(60)
         val TIMETABLE_TIMEOUT: Duration = Duration.ofSeconds(10)
+        val POSITION_TIMEOUT: Duration = Duration.ofSeconds(10)
     }
 }
