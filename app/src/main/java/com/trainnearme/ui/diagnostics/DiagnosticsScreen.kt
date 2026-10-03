@@ -1,5 +1,7 @@
 package com.trainnearme.ui.diagnostics
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -29,6 +31,8 @@ import com.trainnearme.core.data.ProviderHealth
 import com.trainnearme.core.data.ProviderHealthStore
 import com.trainnearme.core.domain.MUMBAI_ZONE
 import com.trainnearme.proximity.EventLog
+import com.trainnearme.ui.common.GroupCard
+import com.trainnearme.ui.common.SectionHeader
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -85,37 +89,48 @@ fun DiagnosticsScreen(
             )
         },
     ) { padding ->
-        LazyColumn(Modifier.fillMaxSize().padding(padding).padding(horizontal = 16.dp)) {
-            item { Text(stringResource(R.string.diagnostics_requests, health.requestCount)) }
+        LazyColumn(Modifier.fillMaxSize().padding(padding), contentPadding = PaddingValues(bottom = 24.dp)) {
+            item { SectionHeader(stringResource(R.string.diagnostics_data), Modifier.padding(start = 4.dp)) }
             item {
-                Text(
-                    if (blockedUntil != null) {
-                        stringResource(R.string.diagnostics_blocked_until, STAMP.format(blockedUntil.atZone(MUMBAI_ZONE)))
-                    } else {
-                        stringResource(R.string.diagnostics_not_blocked)
-                    },
-                )
-            }
-            if (health.keyRejected) {
-                item {
-                    Text(stringResource(R.string.diagnostics_key_rejected), color = MaterialTheme.colorScheme.error)
+                GroupCard {
+                    Column(Modifier.padding(horizontal = 16.dp, vertical = 12.dp)) {
+                        Text(stringResource(R.string.diagnostics_requests, health.requestCount))
+                        Text(
+                            if (blockedUntil != null) {
+                                stringResource(
+                                    R.string.diagnostics_blocked_until,
+                                    STAMP.format(blockedUntil.atZone(MUMBAI_ZONE)),
+                                )
+                            } else {
+                                stringResource(R.string.diagnostics_not_blocked)
+                            },
+                            Modifier.padding(top = 4.dp),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                        if (health.keyRejected) {
+                            Text(
+                                stringResource(R.string.diagnostics_key_rejected),
+                                Modifier.padding(top = 4.dp),
+                                color = MaterialTheme.colorScheme.error,
+                            )
+                        }
+                    }
                 }
             }
-            item {
-                Text(
-                    stringResource(R.string.diagnostics_events),
-                    Modifier.padding(top = 20.dp, bottom = 4.dp),
-                    style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.primary,
-                )
-            }
+            item { SectionHeader(stringResource(R.string.diagnostics_events), Modifier.padding(start = 4.dp)) }
             if (events.isEmpty()) {
-                item { Text(stringResource(R.string.diagnostics_no_events)) }
+                item {
+                    Text(
+                        stringResource(R.string.diagnostics_no_events),
+                        Modifier.padding(horizontal = 20.dp),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
             }
             items(events) { event ->
                 Text(
                     event,
-                    Modifier.padding(vertical = 2.dp),
+                    Modifier.padding(horizontal = 20.dp, vertical = 3.dp),
                     style = MaterialTheme.typography.bodySmall,
                     fontFamily = FontFamily.Monospace,
                 )

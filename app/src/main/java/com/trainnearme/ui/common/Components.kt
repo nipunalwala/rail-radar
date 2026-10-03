@@ -96,6 +96,18 @@ fun SectionHeader(text: String, modifier: Modifier = Modifier) {
     )
 }
 
+/** Groups related rows on one tinted, rounded surface. */
+@Composable
+fun GroupCard(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
+    Surface(
+        modifier.fillMaxWidth().padding(horizontal = ScreenPadding),
+        shape = MaterialTheme.shapes.large,
+        color = MaterialTheme.colorScheme.surfaceContainerLow,
+    ) {
+        Column(Modifier.padding(vertical = 4.dp)) { content() }
+    }
+}
+
 enum class NoticeTone { INFO, PROBLEM }
 
 /** A message the user should not miss, with an optional way to act on it. */

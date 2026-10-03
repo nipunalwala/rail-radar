@@ -28,6 +28,7 @@
     <string name="onboarding_location_reason">To find the station nearest to you. Your location never leaves your phone; only the station\'s code is sent to fetch its trains.</string>
     <string name="onboarding_background_title">Location all the time</string>
     <string name="onboarding_background_reason">Train Near Me uses your location in the background, even when the app is closed or not in use, to notice when you are near a railway station and notify you of the next trains. On the next screen choose \"Allow all the time\".</string>
+    <string name="onboarding_location_first">Allow location first.</string>
     <string name="onboarding_allow">Allow</string>
     <string name="onboarding_allowed">Allowed</string>
     <string name="onboarding_denied_hint">If a button does nothing, the permission was refused earlier. Open the app\'s settings to change it.</string>
@@ -57,6 +58,7 @@
 
     <string name="picker_title">Choose a station</string>
     <string name="picker_search">Search stations</string>
+    <string name="picker_clear">Clear search</string>
     <string name="picker_no_match">No station matches.</string>
 
     <string name="alert_title">Near %1$s Station</string>
@@ -80,6 +82,7 @@
     <string name="diagnostics_blocked_until">Requests paused until %1$s</string>
     <string name="diagnostics_not_blocked">Requests are not paused.</string>
     <string name="diagnostics_key_rejected">The key was rejected on the last request.</string>
+    <string name="diagnostics_data">Train data</string>
     <string name="diagnostics_events">Recent events</string>
     <string name="diagnostics_no_events">No events recorded.</string>
     <string name="diagnostics_clear">Clear events</string>
