@@ -111,6 +111,21 @@ fun HomeScreen(
                         AlertStatusRow(status, onFixAlerts, Modifier.padding(horizontal = 16.dp))
                     }
                 }
+                state.providerNotice?.let { notice ->
+                    item(key = "provider-notice") {
+                        Text(
+                            stringResource(
+                                when (notice) {
+                                    ProviderNotice.KEY_REJECTED -> R.string.notice_key_rejected
+                                    ProviderNotice.LIMIT_REACHED -> R.string.notice_limit_reached
+                                },
+                            ),
+                            Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.error,
+                        )
+                    }
+                }
                 item(key = "next-trains") {
                     Text(
                         stringResource(R.string.home_next_trains),

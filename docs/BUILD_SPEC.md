@@ -65,7 +65,7 @@ order, one at a time: "Do phase N of docs/BUILD_SPEC.md".
 | 7 | Geofencing | Code done 2026-10-04. 55 unit tests pass (station selection and refresh fence). Registration, enter/exit events and survival across a reboot have not been observed on a device |
 | 8 | Alert pipeline | Code done 2026-10-04. 69 unit tests pass (state machine, coordinator, notification content). The notification itself, its sound and vibration channels, the tap-through and a real geofence entry have not been observed on a device. Debug builds have a "Test alert" button on the station screen to exercise the worker and notification without travelling |
 | 9 | Riding suppression and high accuracy mode | Code done 2026-10-04. 81 unit tests pass. Deviation: suppression uses arrival from a neighbouring station, not raw speed or Activity Recognition (see ARCHITECTURE.md 6.4). The foreground service has never been started on a device, and no real train ride has been tested |
-| 10 | Failure handling and quota | Not started |
+| 10 | Failure handling and quota | Code done 2026-10-04. 92 unit tests pass, including the provider run against a local web server for 429, 401, 403 and 503. A 429 stops all requests until the next day and boards fall back to the saved timetable; a rejected key shows a notice on the home screen. Requests are counted per month and shown on a debug-only diagnostics screen. Background audit: the only periodic work is the daily refresh of stale saved timetables; nothing polls live data. Not checked on a device: the notices and the diagnostics screen, and a real 429 from RailRadar has never been seen, so its status code is assumed |
 | 11 | Field test and tuning | Not started |
 | 12 | Pre-release | Not started |
 

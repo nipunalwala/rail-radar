@@ -3,6 +3,7 @@ package com.trainnearme.ui.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.trainnearme.core.data.DepartureRepository
+import com.trainnearme.core.data.ProviderHealthStore
 import com.trainnearme.core.data.SettingsRepository
 import com.trainnearme.core.data.station.StationRepository
 import com.trainnearme.core.domain.distanceTo
@@ -24,6 +25,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.Instant
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
@@ -36,7 +38,11 @@ data class HomeUiState(
     val board: BoardUiState = BoardUiState.Loading,
     /** Null until settings have been read. */
     val alertStatus: AlertStatus? = null,
+    /** A problem with the train data source the user should know about. */
+    val providerNotice: ProviderNotice? = null,
 )
+
+enum class ProviderNotice { KEY_REJECTED, LIMIT_REACHED }
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -46,6 +52,7 @@ class HomeViewModel @Inject constructor(
     private val settings: SettingsRepository,
     private val permissionChecker: PermissionChecker,
     private val geofences: GeofenceSyncer,
+    private val providerHealth: ProviderHealthStore,
 ) : ViewModel() {
 
     /** Everything that decides which station and trains the home screen shows. */
@@ -74,6 +81,16 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             combine(settings.settings, permissions) { s, p -> alertStatus(s.alertsEnabled, p) }
                 .collect { status -> _state.update { it.copy(alertStatus = status) } }
+        }
+        viewModelScope.launch {
+            providerHealth.health.collect { health ->
+                val notice = when {
+                    health.keyRejected -> ProviderNotice.KEY_REJECTED
+                    health.isBlocked(Instant.now()) -> ProviderNotice.LIMIT_REACHED
+                    else -> null
+                }
+                _state.update { it.copy(providerNotice = notice) }
+            }
         }
     }
 

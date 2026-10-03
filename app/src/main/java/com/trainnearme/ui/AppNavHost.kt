@@ -12,6 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.trainnearme.core.data.SettingsRepository
+import com.trainnearme.ui.diagnostics.DiagnosticsScreen
 import com.trainnearme.ui.home.HomeScreen
 import com.trainnearme.ui.onboarding.OnboardingScreen
 import com.trainnearme.ui.picker.StationPickerScreen
@@ -30,6 +31,7 @@ private const val PICKER = "stations"
 private const val STATION = "station"
 private const val SETTINGS = "settings"
 private const val ONBOARDING = "onboarding"
+private const val DIAGNOSTICS = "diagnostics"
 
 @HiltViewModel
 class RootViewModel @Inject constructor(settings: SettingsRepository) : ViewModel() {
@@ -79,7 +81,13 @@ fun AppNavHost(
             )
         }
         composable(SETTINGS) {
-            SettingsScreen(onBack = navController::popBackStack)
+            SettingsScreen(
+                onBack = navController::popBackStack,
+                onOpenDiagnostics = { navController.navigate(DIAGNOSTICS) },
+            )
+        }
+        composable(DIAGNOSTICS) {
+            DiagnosticsScreen(onBack = navController::popBackStack)
         }
         composable("$STATION/{${StationDetailViewModel.STATION_ID_ARG}}") {
             StationDetailScreen(onBack = navController::popBackStack)

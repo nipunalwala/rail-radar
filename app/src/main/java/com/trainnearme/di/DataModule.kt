@@ -1,7 +1,13 @@
 package com.trainnearme.di
 
+import android.content.Context
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import androidx.datastore.preferences.preferencesDataStoreFile
 import com.trainnearme.BuildConfig
+import com.trainnearme.core.data.DataStoreProviderHealthStore
 import com.trainnearme.core.data.DepartureRepository
+import com.trainnearme.core.data.GuardedProvider
+import com.trainnearme.core.data.ProviderHealthStore
 import com.trainnearme.core.data.TrainDataProvider
 import com.trainnearme.core.data.station.StationRepository
 import com.trainnearme.core.data.timetable.TimetableDao
@@ -10,11 +16,9 @@ import com.trainnearme.provider.railradar.RailRadarProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
-import retrofit2.Retrofit
-import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -37,20 +41,23 @@ object DataModule {
 
     @Provides
     @Singleton
-    fun provideRailRadarApi(client: OkHttpClient): RailRadarApi =
-        Retrofit.Builder()
-            .baseUrl(RailRadarApi.BASE_URL)
-            .client(client)
-            .addConverterFactory(
-                RailRadarProvider.json.asConverterFactory("application/json".toMediaType()),
-            )
-            .build()
-            .create(RailRadarApi::class.java)
+    fun provideRailRadarApi(client: OkHttpClient): RailRadarApi = RailRadarProvider.createApi(client)
 
-    // The single place that decides which train-data provider the app uses.
     @Provides
     @Singleton
-    fun provideTrainDataProvider(provider: RailRadarProvider): TrainDataProvider = provider
+    fun provideProviderHealthStore(@ApplicationContext context: Context): ProviderHealthStore =
+        DataStoreProviderHealthStore(
+            PreferenceDataStoreFactory.create { context.preferencesDataStoreFile("provider_health") },
+        )
+
+    // The single place that decides which train-data provider the app uses.
+    // Every request goes through GuardedProvider, which protects the quota.
+    @Provides
+    @Singleton
+    fun provideTrainDataProvider(
+        provider: RailRadarProvider,
+        health: ProviderHealthStore,
+    ): TrainDataProvider = GuardedProvider(provider, health)
 
     @Provides
     @Singleton

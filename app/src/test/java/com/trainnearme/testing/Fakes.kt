@@ -1,5 +1,7 @@
 package com.trainnearme.testing
 
+import com.trainnearme.core.data.ProviderHealth
+import com.trainnearme.core.data.ProviderHealthStore
 import com.trainnearme.core.data.SettingsRepository
 import com.trainnearme.core.data.TrainDataProvider
 import com.trainnearme.core.model.Settings
@@ -63,11 +65,15 @@ class FakeProvider : TrainDataProvider {
     var liveDelayMillis = 0L
     var liveFails = false
     var timetableFails = false
+
+    /** Thrown by every call when set, in place of the generic failures above. */
+    var failure: Exception? = null
     val liveCalls = mutableListOf<String>()
     val timetableCalls = mutableListOf<String>()
 
     override suspend fun timetable(stationCode: String): List<ScheduledDeparture> {
         timetableCalls += stationCode
+        failure?.let { throw it }
         if (timetableFails) throw IOException("offline")
         return timetables[stationCode].orEmpty()
     }
@@ -75,6 +81,7 @@ class FakeProvider : TrainDataProvider {
     override suspend fun liveBoard(stationCode: String, hoursAhead: Int): List<Departure> {
         liveCalls += stationCode
         delay(liveDelayMillis)
+        failure?.let { throw it }
         if (liveFails) throw IOException("offline")
         return live[stationCode].orEmpty()
     }
@@ -86,6 +93,15 @@ class FakeSettingsRepository(initial: Settings = Settings()) : SettingsRepositor
     val current: Settings get() = state.value
     override suspend fun update(transform: (Settings) -> Settings) {
         state.value = transform(state.value).sanitised()
+    }
+}
+
+class FakeProviderHealthStore(initial: ProviderHealth = ProviderHealth()) : ProviderHealthStore {
+    private val state = MutableStateFlow(initial)
+    override val health: Flow<ProviderHealth> = state
+    val current: ProviderHealth get() = state.value
+    override suspend fun update(transform: (ProviderHealth) -> ProviderHealth) {
+        state.value = transform(state.value)
     }
 }
 

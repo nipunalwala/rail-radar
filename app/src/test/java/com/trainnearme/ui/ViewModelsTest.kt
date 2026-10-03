@@ -23,7 +23,9 @@ import com.trainnearme.testing.FakeStationDao
 import com.trainnearme.testing.FakeTimetableDao
 import com.trainnearme.testing.MainDispatcherRule
 import com.trainnearme.ui.common.BoardUiState
+import com.trainnearme.testing.FakeProviderHealthStore
 import com.trainnearme.ui.home.HomeViewModel
+import com.trainnearme.ui.home.ProviderNotice
 import com.trainnearme.ui.picker.StationPickerViewModel
 import com.trainnearme.ui.settings.SettingsViewModel
 import com.trainnearme.ui.station.StationDetailViewModel
@@ -83,7 +85,26 @@ class ViewModelsTest {
 
     private val geofences = FakeGeofenceSyncer()
 
-    private fun homeViewModel() = HomeViewModel(stations, departures, location, settings, permissions, geofences)
+    private val providerHealth = FakeProviderHealthStore()
+
+    private fun homeViewModel() =
+        HomeViewModel(stations, departures, location, settings, permissions, geofences, providerHealth)
+
+    @Test
+    fun `home says when the data source has a problem`() = runTest {
+        val viewModel = homeViewModel()
+        assertNull(viewModel.state.value.providerNotice)
+
+        providerHealth.update { it.copy(blockedUntil = Instant.now().plusSeconds(3600)) }
+        assertEquals(ProviderNotice.LIMIT_REACHED, viewModel.state.value.providerNotice)
+
+        // A pause that has already ended is not reported.
+        providerHealth.update { it.copy(blockedUntil = Instant.now().minusSeconds(60)) }
+        assertNull(viewModel.state.value.providerNotice)
+
+        providerHealth.update { it.copy(keyRejected = true) }
+        assertEquals(ProviderNotice.KEY_REJECTED, viewModel.state.value.providerNotice)
+    }
 
     @Test
     fun `alert status names the first thing that is missing`() {

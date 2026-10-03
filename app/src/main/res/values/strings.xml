@@ -71,6 +71,18 @@
     <string name="channel_working">Checking trains</string>
     <string name="action_test_alert">Test alert</string>
 
+    <string name="notice_key_rejected">The train data service rejected this app\'s key, so only saved timetables can be shown.</string>
+    <string name="notice_limit_reached">The limit for live train data has been reached. Scheduled times are shown until tomorrow.</string>
+
+    <string name="diagnostics_title">Diagnostics</string>
+    <string name="diagnostics_requests">Train data requests this month: %1$d</string>
+    <string name="diagnostics_blocked_until">Requests paused until %1$s</string>
+    <string name="diagnostics_not_blocked">Requests are not paused.</string>
+    <string name="diagnostics_key_rejected">The key was rejected on the last request.</string>
+    <string name="diagnostics_events">Recent events</string>
+    <string name="diagnostics_no_events">No events recorded.</string>
+    <string name="diagnostics_clear">Clear events</string>
+
     <string name="settings_title">Settings</string>
     <string name="settings_section_alerts">Alerts</string>
     <string name="settings_section_trains">Trains</string>

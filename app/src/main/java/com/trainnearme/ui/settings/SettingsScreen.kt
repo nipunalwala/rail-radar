@@ -20,6 +20,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -33,6 +34,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.trainnearme.BuildConfig
 import com.trainnearme.R
 import com.trainnearme.core.model.Line
 import com.trainnearme.core.model.Settings
@@ -44,6 +46,7 @@ import kotlin.math.roundToInt
 @Composable
 fun SettingsScreen(
     onBack: () -> Unit,
+    onOpenDiagnostics: () -> Unit,
     viewModel: SettingsViewModel = hiltViewModel(),
 ) {
     val settings by viewModel.settings.collectAsStateWithLifecycle()
@@ -108,6 +111,12 @@ fun SettingsScreen(
                     enabled = !(checked && current.lines.size == 1),
                     onChange = { viewModel.setLineMonitored(line, it) },
                 )
+            }
+            if (BuildConfig.DEBUG) {
+                HorizontalDivider()
+                TextButton(onClick = onOpenDiagnostics, modifier = Modifier.padding(8.dp)) {
+                    Text(stringResource(R.string.diagnostics_title))
+                }
             }
         }
     }
