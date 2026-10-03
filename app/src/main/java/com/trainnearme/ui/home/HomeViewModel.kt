@@ -12,6 +12,7 @@ import com.trainnearme.core.model.Station
 import com.trainnearme.core.permissions.AlertStatus
 import com.trainnearme.core.permissions.PermissionChecker
 import com.trainnearme.core.permissions.alertStatus
+import com.trainnearme.proximity.GeofenceSyncer
 import com.trainnearme.ui.common.BoardUiState
 import com.trainnearme.ui.common.loadBoardState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -44,6 +45,7 @@ class HomeViewModel @Inject constructor(
     private val location: LocationProvider,
     private val settings: SettingsRepository,
     private val permissionChecker: PermissionChecker,
+    private val geofences: GeofenceSyncer,
 ) : ViewModel() {
 
     /** Everything that decides which station and trains the home screen shows. */
@@ -77,7 +79,10 @@ class HomeViewModel @Inject constructor(
 
     /** Permissions may have changed while the screen was away. */
     fun onResume() {
-        permissions.value = permissionChecker.current()
+        val now = permissionChecker.current()
+        // Geofences can only be registered once background location is granted.
+        if (now.backgroundLocation != permissions.value.backgroundLocation) geofences.requestSync()
+        permissions.value = now
     }
 
     fun refresh() {

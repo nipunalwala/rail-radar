@@ -16,6 +16,7 @@ import com.trainnearme.core.location.LatLng
 import com.trainnearme.core.location.LocationProvider
 import com.trainnearme.core.model.Departure
 import com.trainnearme.core.model.ScheduledDeparture
+import com.trainnearme.proximity.GeofenceSyncer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
@@ -82,6 +83,13 @@ class FakeSettingsRepository(initial: Settings = Settings()) : SettingsRepositor
     val current: Settings get() = state.value
     override suspend fun update(transform: (Settings) -> Settings) {
         state.value = transform(state.value).sanitised()
+    }
+}
+
+class FakeGeofenceSyncer : GeofenceSyncer {
+    var syncs = 0
+    override fun requestSync() {
+        syncs++
     }
 }
 

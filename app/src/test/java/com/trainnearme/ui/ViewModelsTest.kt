@@ -12,6 +12,7 @@ import com.trainnearme.core.model.TrainType
 import com.trainnearme.core.permissions.AlertStatus
 import com.trainnearme.core.permissions.PermissionStatus
 import com.trainnearme.core.permissions.alertStatus
+import com.trainnearme.testing.FakeGeofenceSyncer
 import com.trainnearme.testing.FakeLocationProvider
 import com.trainnearme.testing.FakePermissionChecker
 import com.trainnearme.ui.onboarding.OnboardingViewModel
@@ -79,7 +80,9 @@ class ViewModelsTest {
 
     private val permissions = FakePermissionChecker()
 
-    private fun homeViewModel() = HomeViewModel(stations, departures, location, settings, permissions)
+    private val geofences = FakeGeofenceSyncer()
+
+    private fun homeViewModel() = HomeViewModel(stations, departures, location, settings, permissions, geofences)
 
     @Test
     fun `alert status names the first thing that is missing`() {
@@ -111,9 +114,14 @@ class ViewModelsTest {
         assertEquals(AlertStatus.NEEDS_BACKGROUND_LOCATION, viewModel.state.value.alertStatus)
         assertEquals("thane", viewModel.state.value.station?.id)
 
+        assertEquals(0, geofences.syncs)
         permissions.status = permissions.status.copy(backgroundLocation = true)
         viewModel.onResume()
         assertEquals(AlertStatus.ON, viewModel.state.value.alertStatus)
+        // Background location arriving is what makes geofences possible.
+        assertEquals(1, geofences.syncs)
+        viewModel.onResume()
+        assertEquals(1, geofences.syncs)
 
         settings.update { it.copy(alertsEnabled = false) }
         assertEquals(AlertStatus.OFF, viewModel.state.value.alertStatus)
