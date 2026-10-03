@@ -56,7 +56,7 @@ order, one at a time: "Do phase N of docs/BUILD_SPEC.md".
 | Phase | Title | Status |
 |---|---|---|
 | 0 | Toolchain and first green build | Done 2026-10-03. `assembleDebug` passes; APK produced; git initialised |
-| 1 | Provider skeleton | Code written, never compiled |
+| 1 | Provider skeleton | Done 2026-10-03. 6 unit tests pass. Board screen not yet seen on a device (none connected) |
 | 2 | Station data | Not started |
 | 3 | Departure repository | Not started |
 | 4 | Screens | Not started |
