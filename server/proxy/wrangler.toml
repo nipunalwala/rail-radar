@@ -1,0 +1,14 @@
+name = "train-near-me-proxy"
+main = "src/worker.js"
+compatibility_date = "2026-09-01"
+
+[vars]
+# Upstream requests allowed per month. Keep below the RailRadar plan's limit.
+MONTHLY_LIMIT = "950"
+
+# Created with: wrangler kv namespace create BUDGET
+[[kv_namespaces]]
+binding = "BUDGET"
+id = "REPLACE_WITH_NAMESPACE_ID"
+
+# The API key is a secret, never a var: wrangler secret put RAILRADAR_API_KEY

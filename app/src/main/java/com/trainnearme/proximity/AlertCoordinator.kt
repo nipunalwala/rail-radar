@@ -48,9 +48,13 @@ class AlertCoordinator(
         val due = stationIds.mapNotNull { stations.byId(it) }.filter { station ->
             val result = store.get(station.id).onEnter(time)
             store.set(station.id, result.state)
+            if (!result.alert) log("no alert for ${station.id}: already there, or alerted recently")
             result.alert
         }
-        if (!current.alertsEnabled) return
+        if (!current.alertsEnabled) {
+            log("no alert: alerts are off")
+            return
+        }
 
         // Neighbouring stations can be entered together; one alert is shown, for the closer one.
         val monitored = due.filter { station -> station.lines.any { it in current.lines } }
@@ -58,7 +62,11 @@ class AlertCoordinator(
             monitored.minByOrNull { it.distanceTo(at.lat, at.lng) }
         } else {
             monitored.firstOrNull()
-        } ?: return
+        }
+        if (chosen == null) {
+            if (due.isNotEmpty()) log("no alert for ${due.map { it.id }}: line not monitored")
+            return
+        }
 
         // Decided before anything is fetched, so a ride costs no API calls.
         val others = before
@@ -66,10 +74,10 @@ class AlertCoordinator(
             .mapNotNull { (id, state) -> stations.byId(id)?.let { it to state } }
             .toMap()
         if (isRidingThrough(chosen, current.radiusMetres, speedMps, others, time)) {
-            log("no alert for ${chosen.id}: passing through on a train")
+            log("no alert for ${chosen.id}: passing through on a train (speed ${speedMps ?: "unknown"} m/s)")
             return
         }
-        log("alert for ${chosen.id}")
+        log("alert for ${chosen.id} (speed ${speedMps ?: "unknown"} m/s)")
         scheduler.schedule(chosen.id)
     }
 

@@ -31,17 +31,21 @@ object DataModule {
     fun provideOkHttpClient(): OkHttpClient =
         OkHttpClient.Builder()
             .callTimeout(15, TimeUnit.SECONDS)
-            .addInterceptor { chain ->
-                val request = chain.request().newBuilder()
-                    .header("Authorization", "Bearer ${BuildConfig.RAILRADAR_API_KEY}")
-                    .build()
-                chain.proceed(request)
+            .apply {
+                // Release builds have no key: the proxy adds it.
+                val key = BuildConfig.RAILRADAR_API_KEY
+                if (key.isNotEmpty()) {
+                    addInterceptor { chain ->
+                        chain.proceed(chain.request().newBuilder().header("Authorization", "Bearer $key").build())
+                    }
+                }
             }
             .build()
 
     @Provides
     @Singleton
-    fun provideRailRadarApi(client: OkHttpClient): RailRadarApi = RailRadarProvider.createApi(client)
+    fun provideRailRadarApi(client: OkHttpClient): RailRadarApi = 
+        RailRadarProvider.createApi(client, BuildConfig.TRAIN_API_BASE_URL)
 
     @Provides
     @Singleton
@@ -51,6 +55,8 @@ object DataModule {
         )
 
     // The single place that decides which train-data provider the app uses.
+    // The proxy serves RailRadar's own paths and responses, so the same
+    // provider is used for both; only the base URL and the key differ.
     // Every request goes through GuardedProvider, which protects the quota.
     @Provides
     @Singleton

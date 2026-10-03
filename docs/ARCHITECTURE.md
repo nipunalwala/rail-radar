@@ -188,8 +188,14 @@ can be extracted. Before any public release, the app must call a small proxy
 that holds the key, caches boards per station, and enforces limits. The proxy is
 simply another `TrainDataProvider` implementation from the app's point of view.
 
-During development the key lives in `local.properties` as `RAILRADAR_API_KEY`
-and is exposed through `BuildConfig`.
+The proxy is in `server/proxy` (a Cloudflare Worker, not yet deployed). It serves
+the same two paths with the same response bodies as RailRadar, so the app uses
+the same provider class for both and only the base URL differs:
+
+| Build | Talks to | Key in the APK |
+|---|---|---|
+| debug | RailRadar directly | Yes, from `RAILRADAR_API_KEY` in `local.properties` |
+| release | The proxy, from `PROXY_BASE_URL` in `local.properties` | No |
 
 ## 6. Location and proximity
 

@@ -66,8 +66,8 @@ order, one at a time: "Do phase N of docs/BUILD_SPEC.md".
 | 8 | Alert pipeline | Code done 2026-10-04. 69 unit tests pass (state machine, coordinator, notification content). The notification itself, its sound and vibration channels, the tap-through and a real geofence entry have not been observed on a device. Debug builds have a "Test alert" button on the station screen to exercise the worker and notification without travelling |
 | 9 | Riding suppression and high accuracy mode | Code done 2026-10-04. 81 unit tests pass. Deviation: suppression uses arrival from a neighbouring station, not raw speed or Activity Recognition (see ARCHITECTURE.md 6.4). The foreground service has never been started on a device, and no real train ride has been tested |
 | 10 | Failure handling and quota | Code done 2026-10-04. 92 unit tests pass, including the provider run against a local web server for 429, 401, 403 and 503. A 429 stops all requests until the next day and boards fall back to the saved timetable; a rejected key shows a notice on the home screen. Requests are counted per month and shown on a debug-only diagnostics screen. Background audit: the only periodic work is the daily refresh of stale saved timetables; nothing polls live data. Not checked on a device: the notices and the diagnostics screen, and a real 429 from RailRadar has never been seen, so its status code is assumed |
-| 11 | Field test and tuning | Not started |
-| 12 | Pre-release | Not started |
+| 11 | Field test and tuning | **Waiting on real journeys.** Prepared 2026-10-04: test sheet in [FIELD_TEST.md](FIELD_TEST.md), and the event log now records why an alert was held back. No journey has been made, so the results table below is empty and no default has been tuned |
+| 12 | Pre-release | Partly done 2026-10-04. Done: release builds carry no key and talk to a proxy (checked by searching the unpacked release APK; the debug APK as a control does contain it), R8 on, launcher icon, signing read from `local.properties`, proxy source in `server/proxy` with 13 passing tests, privacy policy draft, Play declaration text. **Not done, needs the owner:** deploying the proxy, creating the signing key, hosting the privacy policy, the Play Console forms. The release build has never been run on a device and the proxy has never been deployed. See [PLAY_RELEASE.md](PLAY_RELEASE.md) |
 
 ---
 
@@ -289,12 +289,20 @@ as written.
 
 **Acceptance.** Results table recorded in this file; defaults updated.
 
+**Results.** None yet. Fill in from [FIELD_TEST.md](FIELD_TEST.md).
+
+| Date | Line | Phone | Stations approached | Alerts on time (under 3 min) | Late | Missed | False (riding through or repeat) | Battery used over the day |
+|---|---|---|---|---|---|---|---|---|
+| | | | | | | | | |
+
 ## Phase 12: Pre-release
 
 **Goal.** Safe to give to other people.
 
 **Do.**
-- Key proxy server and a `TrainDataProvider` that talks to it.
+- Key proxy server and a `TrainDataProvider` that talks to it. (The proxy
+  serves RailRadar's own paths and bodies, so the existing provider is reused
+  with a different base URL and no key; no second provider class was needed.)
 - App icon, release signing, R8 rules, privacy policy, Play background
   location declaration.
 
@@ -326,4 +334,6 @@ as written.
   Only Dadar, which has one code per line, filters trains by line.
 - The board does not refresh by itself, so the "min" values go stale until the
   user taps Refresh.
-- The app has no launcher icon yet (phase 12).
+- The launcher icon is a placeholder: the notification train in white on blue.
+- A release build needs `PROXY_BASE_URL`; the debug build still uses the
+  developer's key directly.

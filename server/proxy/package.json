@@ -1,0 +1,10 @@
+{
+  "name": "train-near-me-proxy",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test test/",
+    "codes": "node update-codes.mjs",
+    "deploy": "wrangler deploy"
+  }
+}
