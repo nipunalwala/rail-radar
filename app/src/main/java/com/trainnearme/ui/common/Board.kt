@@ -24,6 +24,7 @@ import com.trainnearme.core.domain.effectiveTime
 import com.trainnearme.core.model.BoardSource
 import com.trainnearme.core.model.Departure
 import com.trainnearme.core.model.DepartureBoard
+import com.trainnearme.core.model.Line
 import kotlinx.coroutines.CancellationException
 import java.time.Duration
 import java.time.Instant
@@ -35,9 +36,13 @@ sealed interface BoardUiState {
     data object Failed : BoardUiState
 }
 
-suspend fun DepartureRepository.loadBoardState(stationId: String, count: Int): BoardUiState =
+suspend fun DepartureRepository.loadBoardState(
+    stationId: String,
+    count: Int,
+    lines: Set<Line>,
+): BoardUiState =
     try {
-        nextDepartures(stationId, count)?.let { BoardUiState.Loaded(it) } ?: BoardUiState.Failed
+        nextDepartures(stationId, count, lines)?.let { BoardUiState.Loaded(it) } ?: BoardUiState.Failed
     } catch (e: CancellationException) {
         throw e
     } catch (e: Exception) {

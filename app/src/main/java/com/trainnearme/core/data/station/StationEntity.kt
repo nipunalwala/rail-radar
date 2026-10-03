@@ -17,8 +17,8 @@ data class StationEntity(
     val lng: Double,
     /** Comma-separated [Line] names. */
     val lines: String,
-    /** Comma-separated provider codes. */
-    val providerCodes: String,
+    /** Provider codes with the lines each serves, as "DDR=WESTERN;DR=CENTRAL+HARBOUR". */
+    val codeLines: String,
 )
 
 @Dao
@@ -39,7 +39,9 @@ fun Station.toEntity() = StationEntity(
     lat = lat,
     lng = lng,
     lines = lines.joinToString(",") { it.name },
-    providerCodes = providerCodes.joinToString(","),
+    codeLines = codeLines.entries.joinToString(";") { (code, lines) ->
+        "$code=${lines.joinToString("+") { it.name }}"
+    },
 )
 
 fun StationEntity.toStation() = Station(
@@ -48,5 +50,8 @@ fun StationEntity.toStation() = Station(
     lat = lat,
     lng = lng,
     lines = lines.split(",").map(Line::valueOf).toSet(),
-    providerCodes = providerCodes.split(","),
+    codeLines = codeLines.split(";").associate { entry ->
+        val (code, lines) = entry.split("=")
+        code to lines.split("+").map(Line::valueOf).toSet()
+    },
 )

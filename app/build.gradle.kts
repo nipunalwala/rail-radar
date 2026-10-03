@@ -76,6 +76,7 @@ dependencies {
 
     implementation(libs.work.runtime.ktx)
     implementation(libs.hilt.work)
+    implementation(libs.androidx.datastore.preferences)
     ksp(libs.hilt.work.compiler)
 
     testImplementation(libs.junit)

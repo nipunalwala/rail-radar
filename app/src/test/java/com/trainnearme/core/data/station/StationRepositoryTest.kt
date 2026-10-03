@@ -63,6 +63,9 @@ class StationRepositoryTest {
 
         assertEquals(setOf(Line.WESTERN, Line.CENTRAL), dadar.lines)
         assertEquals(setOf("DDR", "DR"), dadar.providerCodes.toSet())
+        assertEquals(listOf("DDR"), dadar.codesFor(setOf(Line.WESTERN)))
+        assertEquals(listOf("DR"), dadar.codesFor(setOf(Line.CENTRAL)))
+        assertTrue(dadar.codesFor(setOf(Line.HARBOUR)).isEmpty())
     }
 
     @Test

@@ -15,19 +15,24 @@ private data class StationAssetDto(
     val lng: Double,
     val lines: List<String>,
     val providerCodes: List<String>,
+    /** Present only when the station has more than one code. */
+    val codeLines: Map<String, List<String>>? = null,
 )
 
 private val json = Json { ignoreUnknownKeys = true }
 
 /** Parses the bundled station list produced by tools/stations/build-stations.mjs. */
 fun parseStations(assetJson: String): List<Station> =
-    json.decodeFromString<List<StationAssetDto>>(assetJson).map {
+    json.decodeFromString<List<StationAssetDto>>(assetJson).map { dto ->
+        val lines = dto.lines.map(Line::valueOf).toSet()
         Station(
-            id = it.id,
-            name = it.name,
-            lat = it.lat,
-            lng = it.lng,
-            lines = it.lines.map(Line::valueOf).toSet(),
-            providerCodes = it.providerCodes,
+            id = dto.id,
+            name = dto.name,
+            lat = dto.lat,
+            lng = dto.lng,
+            lines = lines,
+            codeLines = dto.providerCodes.associateWith { code ->
+                dto.codeLines?.get(code)?.map(Line::valueOf)?.toSet() ?: lines
+            },
         )
     }

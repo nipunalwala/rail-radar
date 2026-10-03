@@ -3,10 +3,11 @@ package com.trainnearme.ui.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.trainnearme.core.data.DepartureRepository
-import com.trainnearme.core.data.StationSelection
+import com.trainnearme.core.data.SettingsRepository
 import com.trainnearme.core.data.station.StationRepository
 import com.trainnearme.core.domain.distanceTo
 import com.trainnearme.core.location.LocationProvider
+import com.trainnearme.core.model.Line
 import com.trainnearme.core.model.Station
 import com.trainnearme.ui.common.BoardUiState
 import com.trainnearme.ui.common.loadBoardState
@@ -15,6 +16,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -34,15 +37,26 @@ class HomeViewModel @Inject constructor(
     private val stations: StationRepository,
     private val departures: DepartureRepository,
     private val location: LocationProvider,
-    private val selection: StationSelection,
+    private val settings: SettingsRepository,
 ) : ViewModel() {
+
+    /** The settings that decide what the home screen shows. */
+    private data class Inputs(val pickedStationId: String?, val lines: Set<Line>, val trainCount: Int)
+
+    private var inputs = Inputs(null, Line.entries.toSet(), 0)
 
     private val _state = MutableStateFlow(HomeUiState())
     val state: StateFlow<HomeUiState> = _state.asStateFlow()
 
     init {
         viewModelScope.launch {
-            selection.stationId.collectLatest { picked -> showStation(picked) }
+            settings.settings
+                .map { Inputs(it.pickedStationId, it.lines, it.trainCount) }
+                .distinctUntilChanged()
+                .collectLatest {
+                    inputs = it
+                    showStation()
+                }
         }
     }
 
@@ -54,18 +68,20 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun useNearest() = selection.clear()
+    fun useNearest() {
+        viewModelScope.launch { settings.update { it.copy(pickedStationId = null) } }
+    }
 
-    private suspend fun showStation(pickedId: String?) {
+    private suspend fun showStation() {
         _state.value = HomeUiState(resolving = true)
-        val picked = pickedId?.let { stations.byId(it) }
+        val picked = inputs.pickedStationId?.let { stations.byId(it) }
         if (picked != null) {
             _state.value = HomeUiState(resolving = false, station = picked)
             loadBoard(picked.id)
             return
         }
         val here = location.current()
-        val nearest = here?.let { stations.nearest(it.lat, it.lng) }
+        val nearest = here?.let { stations.nearest(it.lat, it.lng, inputs.lines) }
         _state.value = HomeUiState(
             resolving = false,
             station = nearest,
@@ -75,11 +91,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private suspend fun loadBoard(stationId: String) {
-        val board = departures.loadBoardState(stationId, HOME_TRAIN_COUNT)
+        val board = departures.loadBoardState(stationId, inputs.trainCount, inputs.lines)
         _state.update { if (it.station?.id == stationId) it.copy(board = board) else it }
-    }
-
-    companion object {
-        const val HOME_TRAIN_COUNT = 5
     }
 }

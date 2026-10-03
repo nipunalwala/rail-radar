@@ -89,9 +89,10 @@ for (const [line, entries] of Object.entries(LINES)) {
     if (!(code in rr)) problems.push(`${code} (${name}): not in RailRadar directory`);
     if (!osmByRef.get(code)) problems.push(`${code} (${name}): no OpenStreetMap station with this ref`);
     const id = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-    const s = stations.get(id) ?? { id, name, lines: [], providerCodes: [] };
+    const s = stations.get(id) ?? { id, name, lines: [], providerCodes: [], codeLines: {} };
     if (!s.lines.includes(line)) s.lines.push(line);
     if (!s.providerCodes.includes(code)) s.providerCodes.push(code);
+    (s.codeLines[code] ??= []).push(line);
     stations.set(id, s);
   }
 }
@@ -109,6 +110,8 @@ for (const s of stations.values()) {
     lng: round(points.reduce((a, p) => a + p.lng, 0) / points.length),
     lines: s.lines,
     providerCodes: s.providerCodes,
+    // Which lines each code serves; only needed when there is more than one code.
+    ...(s.providerCodes.length > 1 ? { codeLines: s.codeLines } : {}),
   });
 }
 

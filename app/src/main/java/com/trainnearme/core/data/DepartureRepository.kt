@@ -11,6 +11,7 @@ import com.trainnearme.core.domain.upcomingDepartures
 import com.trainnearme.core.model.BoardSource
 import com.trainnearme.core.model.Departure
 import com.trainnearme.core.model.DepartureBoard
+import com.trainnearme.core.model.Line
 import com.trainnearme.core.model.ScheduledDeparture
 import com.trainnearme.core.model.TrainType
 import kotlinx.coroutines.CancellationException
@@ -39,16 +40,21 @@ class DepartureRepository(
     private val liveCacheLock = Mutex()
     private val liveCache = HashMap<String, CachedLive>()
 
-    /** Null when [stationId] is unknown. */
+    /**
+     * Null when [stationId] is unknown. Only the station's codes that serve
+     * [lines] are queried; a station on none of them is queried in full.
+     */
     suspend fun nextDepartures(
         stationId: String,
         count: Int,
+        lines: Set<Line> = Line.entries.toSet(),
         localsOnly: Boolean = true,
     ): DepartureBoard? {
         val station = stations.byId(stationId) ?: return null
         val at = now()
+        val codes = station.codesFor(lines).ifEmpty { station.providerCodes }
         val perCode = coroutineScope {
-            station.providerCodes.map { code -> async { loadCode(code, at) } }.awaitAll()
+            codes.map { code -> async { loadCode(code, at) } }.awaitAll()
         }
         val stationNames = stations.all()
             .flatMap { s -> s.providerCodes.map { it to s.name } }

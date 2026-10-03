@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.trainnearme.core.data.DepartureRepository
+import com.trainnearme.core.data.SettingsRepository
 import com.trainnearme.core.data.station.StationRepository
 import com.trainnearme.core.model.Station
 import com.trainnearme.ui.common.BoardUiState
@@ -12,6 +13,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -26,6 +28,7 @@ class StationDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val stations: StationRepository,
     private val departures: DepartureRepository,
+    private val settings: SettingsRepository,
 ) : ViewModel() {
 
     private val stationId: String = checkNotNull(savedStateHandle[STATION_ID_ARG])
@@ -43,7 +46,8 @@ class StationDetailViewModel @Inject constructor(
     fun refresh() {
         viewModelScope.launch {
             _state.update { it.copy(board = BoardUiState.Loading) }
-            val board = departures.loadBoardState(stationId, FULL_BOARD_COUNT)
+            val lines = settings.settings.first().lines
+            val board = departures.loadBoardState(stationId, FULL_BOARD_COUNT, lines)
             _state.update { it.copy(board = board) }
         }
     }

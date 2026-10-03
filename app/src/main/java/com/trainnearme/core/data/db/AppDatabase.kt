@@ -12,7 +12,7 @@ import com.trainnearme.core.data.timetable.TimetableMetaEntity
 // empties the table and the asset is imported again on next use.
 @Database(
     entities = [StationEntity::class, TimetableEntryEntity::class, TimetableMetaEntity::class],
-    version = 2,
+    version = 3,
     exportSchema = false,
 )
 abstract class AppDatabase : RoomDatabase() {

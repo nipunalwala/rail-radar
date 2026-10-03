@@ -8,7 +8,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -38,6 +43,7 @@ import com.trainnearme.ui.common.linesLabel
 fun HomeScreen(
     onOpenStation: (String) -> Unit,
     onChangeStation: () -> Unit,
+    onOpenSettings: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -49,7 +55,12 @@ fun HomeScreen(
                 title = { Text(stringResource(R.string.app_name)) },
                 actions = {
                     if (station != null) {
-                        TextButton(onClick = viewModel::refresh) { Text(stringResource(R.string.action_refresh)) }
+                        IconButton(onClick = viewModel::refresh) {
+                            Icon(Icons.Default.Refresh, stringResource(R.string.action_refresh))
+                        }
+                    }
+                    IconButton(onClick = onOpenSettings) {
+                        Icon(Icons.Default.Settings, stringResource(R.string.settings_title))
                     }
                 },
             )

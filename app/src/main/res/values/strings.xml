@@ -38,5 +38,16 @@
     <string name="picker_search">Search stations</string>
     <string name="picker_no_match">No station matches.</string>
 
+    <string name="settings_title">Settings</string>
+    <string name="settings_section_alerts">Alerts</string>
+    <string name="settings_section_trains">Trains</string>
+    <string name="settings_section_lines">Lines to monitor</string>
+    <string name="settings_alerts">Automatic alerts</string>
+    <string name="settings_alerts_hint">Notify me with the next trains when I get near a station.</string>
+    <string name="settings_radius">Alert distance from station</string>
+    <string name="settings_sound">Notification sound</string>
+    <string name="settings_vibration">Vibration</string>
+    <string name="settings_train_count">Number of trains to show</string>
+
     <string name="credit_osm">Station locations © OpenStreetMap contributors</string>
 </resources>

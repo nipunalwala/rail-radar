@@ -14,6 +14,7 @@ serialization = "1.7.3"
 coroutines = "1.9.0"
 room = "2.6.1"
 work = "2.9.1"
+datastore = "1.1.1"
 navigation = "2.8.5"
 playServicesLocation = "21.3.0"
 hiltWork = "1.2.0"
@@ -45,6 +46,7 @@ room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "work" }
 hilt-work = { module = "androidx.hilt:hilt-work", version.ref = "hiltWork" }
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 hilt-work-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "hiltWork" }
 junit = { module = "junit:junit", version.ref = "junit" }
 

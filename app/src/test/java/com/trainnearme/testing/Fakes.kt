@@ -1,6 +1,10 @@
 package com.trainnearme.testing
 
+import com.trainnearme.core.data.SettingsRepository
 import com.trainnearme.core.data.TrainDataProvider
+import com.trainnearme.core.model.Settings
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import com.trainnearme.core.data.station.StationDao
 import com.trainnearme.core.data.station.StationEntity
 import com.trainnearme.core.data.timetable.TimetableDao
@@ -67,6 +71,15 @@ class FakeProvider : TrainDataProvider {
         delay(liveDelayMillis)
         if (liveFails) throw IOException("offline")
         return live[stationCode].orEmpty()
+    }
+}
+
+class FakeSettingsRepository(initial: Settings = Settings()) : SettingsRepository {
+    private val state = MutableStateFlow(initial)
+    override val settings: Flow<Settings> = state
+    val current: Settings get() = state.value
+    override suspend fun update(transform: (Settings) -> Settings) {
+        state.value = transform(state.value).sanitised()
     }
 }
 

@@ -60,7 +60,7 @@ order, one at a time: "Do phase N of docs/BUILD_SPEC.md".
 | 2 | Station data | Done 2026-10-03. 109 stations; 13 unit tests pass in total. Database import not yet run on a device |
 | 3 | Departure repository | Done 2026-10-03. 28 unit tests pass in total. Room queries, the refresh worker and the app start-up have not run on a device |
 | 4 | Screens | Done 2026-10-04. 37 unit tests pass. On a phone (Android 16): home with a picked station and the picker seen working with live data. Not seen on the phone: station detail, nearest-station by location (needs the permission flow from phase 6), scheduled-only and unavailable states |
-| 5 | Settings | Not started |
+| 5 | Settings | Done 2026-10-04. 46 unit tests pass, including persistence through a real DataStore file. Settings screen not yet seen on a phone. Alert settings (on/off, radius, sound, vibration) are stored but unused until phases 7 and 8 |
 | 6 | Permissions and onboarding | Not started |
 | 7 | Geofencing | Not started |
 | 8 | Alert pipeline | Not started |
@@ -317,8 +317,10 @@ as written.
 - Parel/Prabhadevi (290 m), Lower Parel/Currey Road (346 m) and
   Matunga/Matunga Road (367 m) sit inside each other's 500 m radius. Phase 8
   must decide what one alert shows when two stations are entered together.
-- The picked station is held in memory only and is lost when the app process
-  ends. Phase 5 should persist it with the other settings.
+- The picked station is saved with the settings (done in phase 5).
+- A code shared by two lines cannot be split by line. With only Harbour
+  monitored, Andheri still shows its Western trains, because both use `ADH`.
+  Only Dadar, which has one code per line, filters trains by line.
 - The board does not refresh by itself, so the "min" values go stale until the
   user taps Refresh.
 - The app has no launcher icon yet (phase 12).
