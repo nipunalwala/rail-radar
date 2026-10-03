@@ -106,7 +106,7 @@ class FakeAlertStateStore : AlertStateStore {
     override suspend fun set(stationId: String, state: StationAlertState) {
         states[stationId] = state
     }
-    override suspend fun insideStationIds() = states.filterValues { it.inside }.keys
+    override suspend fun all() = states.toMap()
 }
 
 class FakeGeofenceSyncer : GeofenceSyncer {

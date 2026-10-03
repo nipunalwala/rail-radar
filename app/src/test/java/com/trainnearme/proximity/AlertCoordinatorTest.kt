@@ -146,6 +146,26 @@ class AlertCoordinatorTest {
     }
 
     @Test
+    fun `passing a station on a train gives no alert but the next real arrival does`() = runTest {
+        // Boarded at Parel: the alert there is wanted.
+        coordinator.onEnter(listOf("parel"), at = atParel)
+        coordinator.onExit(listOf("parel"))
+        assertEquals(listOf("parel"), scheduler.scheduled)
+
+        // Thane is about 22 km up the same line; reaching it ten minutes later is a train ride.
+        now = now.plusSeconds(600)
+        coordinator.onEnter(listOf("thane"), at = null, speedMps = 15f)
+        assertEquals(listOf("parel"), scheduler.scheduled)
+        // The pass is still recorded, so leaving and coming back behaves normally.
+        assertTrue(store.get("thane").inside)
+
+        coordinator.onExit(listOf("thane"))
+        now = now.plusSeconds(3 * 3600)
+        coordinator.onEnter(listOf("thane"), at = null, speedMps = 1.2f)
+        assertEquals(listOf("parel", "thane"), scheduler.scheduled)
+    }
+
+    @Test
     fun `unknown station ids are ignored`() = runTest {
         coordinator.onEnter(listOf("nowhere"), at = null)
 

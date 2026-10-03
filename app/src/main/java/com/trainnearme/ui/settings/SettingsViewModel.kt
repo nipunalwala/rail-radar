@@ -31,6 +31,8 @@ class SettingsViewModel @Inject constructor(
 
     fun setVibration(enabled: Boolean) = update { it.copy(vibration = enabled) }
 
+    fun setHighAccuracy(enabled: Boolean) = update { it.copy(highAccuracy = enabled) }
+
     /** The last monitored line cannot be switched off. */
     fun setLineMonitored(line: Line, monitored: Boolean) = update {
         val lines = if (monitored) it.lines + line else it.lines - line

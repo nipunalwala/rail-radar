@@ -82,6 +82,24 @@ class Notifier @Inject constructor(
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .build()
 
+    /** The permanent notification Android requires while high accuracy mode runs. */
+    fun highAccuracyNotification(): Notification =
+        NotificationCompat.Builder(context, CHANNEL_WORKING)
+            .setSmallIcon(R.drawable.ic_train)
+            .setContentTitle(context.getString(R.string.high_accuracy_title))
+            .setContentText(context.getString(R.string.high_accuracy_text))
+            .setOngoing(true)
+            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .setContentIntent(
+                PendingIntent.getActivity(
+                    context,
+                    0,
+                    Intent(context, MainActivity::class.java),
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+                ),
+            )
+            .build()
+
     private fun render(line: AlertLine): String {
         val time = if (line.minutes == 0L) {
             context.getString(R.string.board_now)
@@ -151,6 +169,7 @@ class Notifier @Inject constructor(
     companion object {
         const val EXTRA_STATION_ID = "stationId"
         const val WORKING_ID = 2
+        const val HIGH_ACCURACY_ID = 3
         private const val ALERT_ID = 1
         private const val CHANNEL_SOUND_VIBRATE = "alerts_sound_vibrate"
         private const val CHANNEL_SOUND = "alerts_sound"

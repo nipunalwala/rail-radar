@@ -6,6 +6,8 @@ data class Settings(
     val trainCount: Int = DEFAULT_TRAIN_COUNT,
     val sound: Boolean = true,
     val vibration: Boolean = true,
+    /** Watches the position continuously for faster alerts, at a cost in battery. */
+    val highAccuracy: Boolean = false,
     val lines: Set<Line> = Line.entries.toSet(),
     /** Station chosen by hand on the home screen, or null to follow location. */
     val pickedStationId: String? = null,

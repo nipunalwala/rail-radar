@@ -6,6 +6,7 @@ import androidx.work.Configuration
 import com.trainnearme.core.data.SettingsRepository
 import com.trainnearme.core.data.timetable.TimetableRefreshWorker
 import com.trainnearme.proximity.GeofenceSyncer
+import com.trainnearme.proximity.HighAccuracyController
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -19,6 +20,7 @@ class TrainNearMeApp : Application(), Configuration.Provider {
     @Inject lateinit var workerFactory: HiltWorkerFactory
     @Inject lateinit var settings: SettingsRepository
     @Inject lateinit var geofences: GeofenceSyncer
+    @Inject lateinit var highAccuracy: HighAccuracyController
     @Inject lateinit var appScope: CoroutineScope
 
     override val workManagerConfiguration: Configuration
@@ -33,6 +35,12 @@ class TrainNearMeApp : Application(), Configuration.Provider {
                 .map { Triple(it.alertsEnabled, it.radiusMetres, it.lines) }
                 .distinctUntilChanged()
                 .collect { geofences.requestSync() }
+        }
+        appScope.launch {
+            settings.settings
+                .map { it.alertsEnabled && it.highAccuracy }
+                .distinctUntilChanged()
+                .collect { highAccuracy.apply(it) }
         }
     }
 }

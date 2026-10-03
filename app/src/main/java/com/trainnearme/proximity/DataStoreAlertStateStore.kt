@@ -29,12 +29,18 @@ class DataStoreAlertStateStore(
         }
     }
 
-    override suspend fun insideStationIds(): Set<String> =
-        dataStore.data.first().asMap().keys
-            .map { it.name }
-            .filter { it.startsWith(INSIDE) }
-            .map { it.removePrefix(INSIDE) }
-            .toSet()
+    override suspend fun all(): Map<String, StationAlertState> {
+        val prefs = dataStore.data.first()
+        return prefs.asMap().keys
+            .map { it.name.substringAfter(':') }
+            .distinct()
+            .associateWith { id ->
+                StationAlertState(
+                    inside = prefs[insideKey(id)] ?: false,
+                    lastExitAt = prefs[exitKey(id)]?.let(Instant::ofEpochMilli),
+                )
+            }
+    }
 
     private fun insideKey(stationId: String) = booleanPreferencesKey(INSIDE + stationId)
     private fun exitKey(stationId: String) = longPreferencesKey(EXIT + stationId)

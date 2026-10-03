@@ -80,6 +80,10 @@
     <string name="settings_radius">Alert distance from station</string>
     <string name="settings_sound">Notification sound</string>
     <string name="settings_vibration">Vibration</string>
+    <string name="settings_high_accuracy">High accuracy mode</string>
+    <string name="settings_high_accuracy_hint">Checks your position every few seconds so alerts arrive sooner. Uses noticeably more battery and shows a permanent notification.</string>
+    <string name="high_accuracy_title">Watching for stations</string>
+    <string name="high_accuracy_text">High accuracy mode is on. Turn it off in settings to save battery.</string>
     <string name="settings_train_count">Number of trains to show</string>
 
     <string name="credit_osm">Station locations © OpenStreetMap contributors</string>

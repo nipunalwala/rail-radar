@@ -240,9 +240,20 @@ OUTSIDE ──ENTER──► alert sent ──► INSIDE ──EXIT──► OUT
 ### 6.4 Riding through stations
 
 A user already on a train enters every station's geofence along the route. To
-avoid a notification at each stop, the receiver suppresses the alert when the
-triggering location reports a speed above about 20 km/h, or when Activity
-Recognition reports `IN_VEHICLE`. This heuristic needs field tuning.
+avoid a notification at each stop, the alert is suppressed when the user has
+just come from another station on the same line faster than about 20 km/h,
+measured from when they left that station's radius to when they entered this
+one's. The decision is made before any train data is fetched.
+
+This replaces the original plan (speed above 20 km/h, or Activity Recognition
+reporting `IN_VEHICLE`). Speed alone would also silence someone arriving by
+auto-rickshaw or bus, who does want the alert, and Activity Recognition cannot
+tell a train from a road vehicle while costing another runtime permission.
+
+Known gaps, to be tuned in the field: changing trains at an interchange gets no
+alert, because the user arrived there by train; and stations whose radii
+overlap (about 1 km apart at 500 m) cannot be judged by timing, so a ride
+between them relies on the reported speed.
 
 ### 6.5 Latency
 
@@ -274,8 +285,9 @@ persistent notification) offered in settings as an explicit battery trade-off.
 
 ## 9. Permissions
 
-`ACCESS_FINE_LOCATION`, `ACCESS_BACKGROUND_LOCATION`, `POST_NOTIFICATIONS`,
-`RECEIVE_BOOT_COMPLETED`, `ACTIVITY_RECOGNITION`, `INTERNET`. Play Store requires
+`ACCESS_FINE_LOCATION`, `ACCESS_COARSE_LOCATION`, `ACCESS_BACKGROUND_LOCATION`,
+`POST_NOTIFICATIONS`, `RECEIVE_BOOT_COMPLETED`, `INTERNET`, and for high
+accuracy mode `FOREGROUND_SERVICE` and `FOREGROUND_SERVICE_LOCATION`. Play Store requires
 a justification and a prominent in-app disclosure for background location.
 
 If background location is denied, the app still works when opened, and says so.

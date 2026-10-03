@@ -79,6 +79,12 @@ fun SettingsScreen(
             )
             SwitchRow(stringResource(R.string.settings_sound), null, current.sound, viewModel::setSound)
             SwitchRow(stringResource(R.string.settings_vibration), null, current.vibration, viewModel::setVibration)
+            SwitchRow(
+                stringResource(R.string.settings_high_accuracy),
+                stringResource(R.string.settings_high_accuracy_hint),
+                current.highAccuracy,
+                viewModel::setHighAccuracy,
+            )
             HorizontalDivider()
 
             SectionTitle(stringResource(R.string.settings_section_trains))

@@ -46,7 +46,8 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
                 when (transition) {
                     Geofence.GEOFENCE_TRANSITION_ENTER -> {
                         log.record("enter $stationIds")
-                        coordinator.onEnter(stationIds, at)
+                        val speed = event.triggeringLocation?.takeIf { it.hasSpeed() }?.speed
+                        coordinator.onEnter(stationIds, at, speed)
                     }
                     Geofence.GEOFENCE_TRANSITION_EXIT -> {
                         log.record("exit $stationIds")

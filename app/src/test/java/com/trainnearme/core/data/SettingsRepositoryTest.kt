@@ -58,8 +58,10 @@ class SettingsRepositoryTest {
             trainCount = 3,
             sound = false,
             vibration = false,
+            highAccuracy = true,
             lines = setOf(Line.WESTERN, Line.HARBOUR),
             pickedStationId = "dadar",
+            onboardingDone = true,
         )
         val (first, firstJob) = open()
         first.update { changed }

@@ -310,6 +310,7 @@ class ViewModelsTest {
         viewModel.setTrainCount(3)
         viewModel.setSound(false)
         viewModel.setVibration(false)
+        viewModel.setHighAccuracy(true)
         viewModel.setLineMonitored(Line.WESTERN, false)
         viewModel.setLineMonitored(Line.HARBOUR, false)
         // Central is the last line left, so this is ignored.
@@ -322,6 +323,7 @@ class ViewModelsTest {
                 trainCount = 3,
                 sound = false,
                 vibration = false,
+                highAccuracy = true,
                 lines = setOf(Line.CENTRAL),
             ),
             viewModel.settings.value,

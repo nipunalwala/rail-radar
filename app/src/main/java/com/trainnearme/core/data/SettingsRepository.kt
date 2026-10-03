@@ -35,6 +35,7 @@ class DataStoreSettingsRepository(
             prefs[VIBRATION] = updated.vibration
             prefs[LINES] = updated.lines.map { it.name }.toSet()
             prefs[ONBOARDING_DONE] = updated.onboardingDone
+            prefs[HIGH_ACCURACY] = updated.highAccuracy
             if (updated.pickedStationId != null) {
                 prefs[PICKED_STATION] = updated.pickedStationId
             } else {
@@ -51,6 +52,7 @@ class DataStoreSettingsRepository(
             trainCount = this[TRAIN_COUNT] ?: defaults.trainCount,
             sound = this[SOUND] ?: defaults.sound,
             vibration = this[VIBRATION] ?: defaults.vibration,
+            highAccuracy = this[HIGH_ACCURACY] ?: defaults.highAccuracy,
             lines = this[LINES]
                 ?.mapNotNull { name -> Line.entries.firstOrNull { it.name == name } }
                 ?.toSet()
@@ -69,5 +71,6 @@ class DataStoreSettingsRepository(
         val LINES = stringSetPreferencesKey("lines")
         val PICKED_STATION = stringPreferencesKey("picked_station")
         val ONBOARDING_DONE = booleanPreferencesKey("onboarding_done")
+        val HIGH_ACCURACY = booleanPreferencesKey("high_accuracy")
     }
 }
