@@ -57,13 +57,15 @@ class DepartureRepository(
         val merged = perCode.flatMap { data ->
             val timetable = data.timetable.orEmpty()
             val timetableNames = timetable.associate { it.trainNumber to it.destinationName }
-            val live = data.live?.map { departure ->
-                val name = timetableNames[departure.trainNumber]?.takeIf { it.isNotBlank() }
-                    ?: stationNames[departure.destinationCode]
+            // The live board carries only a destination code. The app's own
+            // station name is preferred so a station is spelt one way everywhere;
+            // the provider's name covers destinations outside the suburban list.
+            mergeDepartures(scheduledDeparturesWithin(timetable, at, WINDOW), data.live).map { departure ->
+                val name = stationNames[departure.destinationCode]
+                    ?: timetableNames[departure.trainNumber]?.takeIf { it.isNotBlank() }
                     ?: departure.destinationName
                 departure.copy(destinationName = name)
             }
-            mergeDepartures(scheduledDeparturesWithin(timetable, at, WINDOW), live)
         }
 
         val source = when {

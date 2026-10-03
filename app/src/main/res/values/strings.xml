@@ -1,3 +1,42 @@
 <resources>
     <string name="app_name">Train Near Me</string>
+
+    <string name="action_refresh">Refresh</string>
+    <string name="action_back">Back</string>
+    <string name="action_change_station">Change station</string>
+    <string name="action_choose_station">Choose a station</string>
+    <string name="action_use_nearest">Use nearest</string>
+    <string name="action_see_all_trains">See all trains</string>
+
+    <string name="home_no_station">Choose a station to see its next trains.</string>
+    <string name="home_no_station_hint">Your location is not available, so the nearest station cannot be found.</string>
+    <string name="home_finding_station">Finding your station…</string>
+    <string name="home_nearest_station">Nearest station · %1$s away</string>
+    <string name="home_chosen_station">Chosen station</string>
+    <string name="home_alerts_not_set_up">Automatic alerts are not set up yet.</string>
+    <string name="home_next_trains">Next trains</string>
+
+    <string name="distance_metres">%1$d m</string>
+    <string name="distance_kilometres">%1$s km</string>
+
+    <string name="line_western">Western</string>
+    <string name="line_central">Central</string>
+    <string name="line_harbour">Harbour</string>
+
+    <string name="board_scheduled_only">Scheduled times. Live data is unavailable.</string>
+    <string name="board_unavailable">Train data is unavailable. Check your connection and refresh.</string>
+    <string name="board_empty">No local trains in the next two hours.</string>
+    <string name="board_failed">Could not load trains.</string>
+    <string name="board_now">Now</string>
+    <string name="board_minutes">%1$d min</string>
+    <string name="board_platform">PF %1$s</string>
+    <string name="board_late">+%1$d late</string>
+    <string name="board_on_time">On time</string>
+    <string name="board_scheduled">Scheduled</string>
+
+    <string name="picker_title">Choose a station</string>
+    <string name="picker_search">Search stations</string>
+    <string name="picker_no_match">No station matches.</string>
+
+    <string name="credit_osm">Station locations © OpenStreetMap contributors</string>
 </resources>

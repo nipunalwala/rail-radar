@@ -1,18 +1,15 @@
 package com.trainnearme.core.data
 
-import com.trainnearme.core.data.station.StationDao
-import com.trainnearme.core.data.station.StationEntity
 import com.trainnearme.core.data.station.StationRepository
-import com.trainnearme.core.data.timetable.TimetableDao
-import com.trainnearme.core.data.timetable.TimetableEntryEntity
-import com.trainnearme.core.data.timetable.TimetableMetaEntity
 import com.trainnearme.core.model.BoardSource
 import com.trainnearme.core.model.Departure
 import com.trainnearme.core.model.DepartureStatus
 import com.trainnearme.core.model.ScheduledDeparture
 import com.trainnearme.core.model.TrainType
+import com.trainnearme.testing.FakeProvider
+import com.trainnearme.testing.FakeStationDao
+import com.trainnearme.testing.FakeTimetableDao
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.currentTime
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -20,7 +17,6 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.io.IOException
 import java.time.DayOfWeek
 import java.time.Duration
 import java.time.Instant
@@ -41,55 +37,6 @@ class DepartureRepositoryTest {
           {"id":"thane","name":"Thane","lat":19.1860,"lng":72.9756,"lines":["CENTRAL"],"providerCodes":["TNA"]}
         ]
     """.trimIndent()
-
-    private class FakeStationDao : StationDao {
-        val rows = mutableListOf<StationEntity>()
-        override suspend fun count() = rows.size
-        override suspend fun getAll() = rows.toList()
-        override suspend fun insertAll(stations: List<StationEntity>) {
-            rows += stations
-        }
-    }
-
-    private class FakeTimetableDao : TimetableDao {
-        val entries = mutableListOf<TimetableEntryEntity>()
-        val metas = mutableMapOf<String, TimetableMetaEntity>()
-        override suspend fun entries(providerCode: String) = entries.filter { it.providerCode == providerCode }
-        override suspend fun meta(providerCode: String) = metas[providerCode]
-        override suspend fun allMeta() = metas.values.toList()
-        override suspend fun deleteEntries(providerCode: String) {
-            entries.removeAll { it.providerCode == providerCode }
-        }
-        override suspend fun insertEntries(entries: List<TimetableEntryEntity>) {
-            this.entries += entries
-        }
-        override suspend fun insertMeta(meta: TimetableMetaEntity) {
-            metas[meta.providerCode] = meta
-        }
-    }
-
-    private class FakeProvider : TrainDataProvider {
-        val timetables = mutableMapOf<String, List<ScheduledDeparture>>()
-        val live = mutableMapOf<String, List<Departure>>()
-        var liveDelayMillis = 0L
-        var liveFails = false
-        var timetableFails = false
-        val liveCalls = mutableListOf<String>()
-        val timetableCalls = mutableListOf<String>()
-
-        override suspend fun timetable(stationCode: String): List<ScheduledDeparture> {
-            timetableCalls += stationCode
-            if (timetableFails) throw IOException("offline")
-            return timetables[stationCode].orEmpty()
-        }
-
-        override suspend fun liveBoard(stationCode: String, hoursAhead: Int): List<Departure> {
-            liveCalls += stationCode
-            delay(liveDelayMillis)
-            if (liveFails) throw IOException("offline")
-            return live[stationCode].orEmpty()
-        }
-    }
 
     private val provider = FakeProvider()
     private val timetableDao = FakeTimetableDao()
@@ -312,6 +259,20 @@ class DepartureRepositoryTest {
         repository.nextDepartures("thane", 5)
         assertEquals(2, provider.liveCalls.size)
         assertEquals(1, provider.timetableCalls.size)
+    }
+
+    @Test
+    fun `destination uses the app's station name, then the provider's`() = runTest {
+        provider.liveFails = true
+        provider.timetables["DR"] = listOf(
+            // TNA is a known station, spelt "Thane" in the app.
+            scheduled("known", "23:05", destination = "Thane Jn"),
+            scheduled("unknown", "23:06", destination = "Pune Jn").copy(destinationCode = "PUNE"),
+        )
+
+        val names = repository.nextDepartures("dadar", 5)!!.departures.associate { it.trainNumber to it.destinationName }
+
+        assertEquals(mapOf("known" to "Thane", "unknown" to "Pune Jn"), names)
     }
 
     @Test
