@@ -44,6 +44,7 @@ class GeofenceManager @Inject constructor(
     private val settings: SettingsRepository,
     private val location: LocationProvider,
     private val permissions: PermissionChecker,
+    private val coordinator: AlertCoordinator,
     private val log: EventLog,
 ) : GeofenceSyncer {
 
@@ -84,7 +85,9 @@ class GeofenceManager @Inject constructor(
                 log.record("geofences removed: no background location permission")
                 return@withLock
             }
-            val plan = planGeofences(stations.all(), current.lines, location.current(), current.radiusMetres)
+            val here = location.current()
+            if (here != null) coordinator.reconcile(here, current.radiusMetres)
+            val plan = planGeofences(stations.all(), current.lines, here, current.radiusMetres)
             val fences = plan.stations.map { stationFence(it, current.radiusMetres) } +
                 listOfNotNull(plan.refresh?.let(::refreshFence))
             if (fences.isEmpty()) return@withLock

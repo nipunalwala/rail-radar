@@ -16,6 +16,9 @@ import com.trainnearme.core.location.LatLng
 import com.trainnearme.core.location.LocationProvider
 import com.trainnearme.core.model.Departure
 import com.trainnearme.core.model.ScheduledDeparture
+import com.trainnearme.core.domain.StationAlertState
+import com.trainnearme.proximity.AlertScheduler
+import com.trainnearme.proximity.AlertStateStore
 import com.trainnearme.proximity.GeofenceSyncer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -84,6 +87,26 @@ class FakeSettingsRepository(initial: Settings = Settings()) : SettingsRepositor
     override suspend fun update(transform: (Settings) -> Settings) {
         state.value = transform(state.value).sanitised()
     }
+}
+
+class FakeAlertScheduler : AlertScheduler {
+    val scheduled = mutableListOf<String>()
+    val cancelled = mutableListOf<String>()
+    override fun schedule(stationId: String) {
+        scheduled += stationId
+    }
+    override fun cancel(stationId: String) {
+        cancelled += stationId
+    }
+}
+
+class FakeAlertStateStore : AlertStateStore {
+    val states = mutableMapOf<String, StationAlertState>()
+    override suspend fun get(stationId: String) = states[stationId] ?: StationAlertState()
+    override suspend fun set(stationId: String, state: StationAlertState) {
+        states[stationId] = state
+    }
+    override suspend fun insideStationIds() = states.filterValues { it.inside }.keys
 }
 
 class FakeGeofenceSyncer : GeofenceSyncer {

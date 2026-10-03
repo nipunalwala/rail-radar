@@ -12,6 +12,7 @@ import com.trainnearme.core.model.TrainType
 import com.trainnearme.core.permissions.AlertStatus
 import com.trainnearme.core.permissions.PermissionStatus
 import com.trainnearme.core.permissions.alertStatus
+import com.trainnearme.testing.FakeAlertScheduler
 import com.trainnearme.testing.FakeGeofenceSyncer
 import com.trainnearme.testing.FakeLocationProvider
 import com.trainnearme.testing.FakePermissionChecker
@@ -148,7 +149,17 @@ class ViewModelsTest {
         stations,
         departures,
         settings,
+        alertScheduler,
     )
+
+    private val alertScheduler = FakeAlertScheduler()
+
+    @Test
+    fun `test alert schedules an alert for the station on screen`() = runTest {
+        detailViewModel("thane").testAlert()
+
+        assertEquals(listOf("thane"), alertScheduler.scheduled)
+    }
 
     private fun trainNumbers(board: BoardUiState): List<String> =
         (board as BoardUiState.Loaded).board.departures.map { it.trainNumber }

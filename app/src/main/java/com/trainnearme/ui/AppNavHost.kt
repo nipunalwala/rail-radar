@@ -1,6 +1,7 @@
 package com.trainnearme.ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -39,13 +40,24 @@ class RootViewModel @Inject constructor(settings: SettingsRepository) : ViewMode
 }
 
 @Composable
-fun AppNavHost(rootViewModel: RootViewModel = hiltViewModel()) {
+fun AppNavHost(
+    stationToOpen: String?,
+    onStationOpened: () -> Unit,
+    rootViewModel: RootViewModel = hiltViewModel(),
+) {
     val onboardingDone by rootViewModel.onboardingDone.collectAsStateWithLifecycle()
     val done = onboardingDone ?: return
     // Decided once: finishing onboarding must not swap the graph under the user.
     val start = remember { if (done) HOME else ONBOARDING }
 
     val navController = rememberNavController()
+    // An alert notification was tapped: show that station's board.
+    LaunchedEffect(stationToOpen) {
+        if (stationToOpen != null) {
+            navController.navigate("$STATION/$stationToOpen") { launchSingleTop = true }
+            onStationOpened()
+        }
+    }
     NavHost(navController, startDestination = start) {
         composable(ONBOARDING) {
             OnboardingScreen(

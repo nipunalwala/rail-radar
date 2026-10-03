@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.trainnearme.BuildConfig
 import com.trainnearme.R
 import com.trainnearme.ui.common.boardItems
 import com.trainnearme.ui.common.linesLabel
@@ -53,6 +54,11 @@ fun StationDetailScreen(
                     }
                 },
                 actions = {
+                    if (BuildConfig.DEBUG) {
+                        TextButton(onClick = viewModel::testAlert) {
+                            Text(stringResource(R.string.action_test_alert))
+                        }
+                    }
                     TextButton(onClick = viewModel::refresh) { Text(stringResource(R.string.action_refresh)) }
                 },
             )

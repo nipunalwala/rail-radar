@@ -7,6 +7,7 @@ import com.trainnearme.core.data.DepartureRepository
 import com.trainnearme.core.data.SettingsRepository
 import com.trainnearme.core.data.station.StationRepository
 import com.trainnearme.core.model.Station
+import com.trainnearme.proximity.AlertScheduler
 import com.trainnearme.ui.common.BoardUiState
 import com.trainnearme.ui.common.loadBoardState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,6 +30,7 @@ class StationDetailViewModel @Inject constructor(
     private val stations: StationRepository,
     private val departures: DepartureRepository,
     private val settings: SettingsRepository,
+    private val alerts: AlertScheduler,
 ) : ViewModel() {
 
     private val stationId: String = checkNotNull(savedStateHandle[STATION_ID_ARG])
@@ -51,6 +53,9 @@ class StationDetailViewModel @Inject constructor(
             _state.update { it.copy(board = board) }
         }
     }
+
+    /** Runs the alert for this station as if the user had just arrived. Debug builds only. */
+    fun testAlert() = alerts.schedule(stationId)
 
     companion object {
         const val STATION_ID_ARG = "stationId"

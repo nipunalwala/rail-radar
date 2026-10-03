@@ -58,6 +58,19 @@
     <string name="picker_search">Search stations</string>
     <string name="picker_no_match">No station matches.</string>
 
+    <string name="alert_title">Near %1$s Station</string>
+    <string name="alert_line">%1$s — %2$s</string>
+    <string name="alert_scheduled_only">Scheduled times</string>
+    <string name="alert_unavailable">Train data is unavailable right now.</string>
+    <string name="alert_no_trains">No local trains in the next two hours.</string>
+    <string name="alert_working">Checking the next trains…</string>
+    <string name="channel_alerts">Train alerts</string>
+    <string name="channel_alerts_sound">Train alerts (sound only)</string>
+    <string name="channel_alerts_vibrate">Train alerts (vibration only)</string>
+    <string name="channel_alerts_silent">Train alerts (silent)</string>
+    <string name="channel_working">Checking trains</string>
+    <string name="action_test_alert">Test alert</string>
+
     <string name="settings_title">Settings</string>
     <string name="settings_section_alerts">Alerts</string>
     <string name="settings_section_trains">Trains</string>

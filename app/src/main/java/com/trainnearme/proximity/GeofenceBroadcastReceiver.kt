@@ -5,13 +5,18 @@ import android.content.Context
 import android.content.Intent
 import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofencingEvent
+import com.trainnearme.core.location.LatLng
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class GeofenceBroadcastReceiver : BroadcastReceiver() {
 
     @Inject lateinit var manager: GeofenceManager
+    @Inject lateinit var coordinator: AlertCoordinator
+    @Inject lateinit var appScope: CoroutineScope
     @Inject lateinit var log: EventLog
 
     override fun onReceive(context: Context, intent: Intent) {
@@ -24,15 +29,32 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
         val stationIds = ids
             .filter { it.startsWith(GeofenceManager.STATION_PREFIX) }
             .map { it.removePrefix(GeofenceManager.STATION_PREFIX) }
+        val at = event.triggeringLocation?.let { LatLng(it.latitude, it.longitude) }
+        val transition = event.geofenceTransition
 
-        when (event.geofenceTransition) {
-            Geofence.GEOFENCE_TRANSITION_ENTER -> log.record("enter $stationIds")
-            Geofence.GEOFENCE_TRANSITION_EXIT -> {
-                if (stationIds.isNotEmpty()) log.record("exit $stationIds")
-                if (GeofenceManager.REFRESH_ID in ids) {
-                    log.record("left the refresh fence")
-                    manager.requestSync()
+        if (transition == Geofence.GEOFENCE_TRANSITION_EXIT && GeofenceManager.REFRESH_ID in ids) {
+            log.record("left the refresh fence")
+            manager.requestSync()
+        }
+        if (stationIds.isEmpty()) return
+
+        // The coordinator only reads stored state and queues a worker, so it
+        // finishes well inside the time a broadcast is allowed.
+        val pending = goAsync()
+        appScope.launch {
+            try {
+                when (transition) {
+                    Geofence.GEOFENCE_TRANSITION_ENTER -> {
+                        log.record("enter $stationIds")
+                        coordinator.onEnter(stationIds, at)
+                    }
+                    Geofence.GEOFENCE_TRANSITION_EXIT -> {
+                        log.record("exit $stationIds")
+                        coordinator.onExit(stationIds)
+                    }
                 }
+            } finally {
+                pending.finish()
             }
         }
     }

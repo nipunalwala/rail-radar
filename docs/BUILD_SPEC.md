@@ -63,7 +63,7 @@ order, one at a time: "Do phase N of docs/BUILD_SPEC.md".
 | 5 | Settings | Done 2026-10-04. 46 unit tests pass, including persistence through a real DataStore file. Settings screen not yet seen on a phone. Alert settings (on/off, radius, sound, vibration) are stored but unused until phases 7 and 8 |
 | 6 | Permissions and onboarding | Code done 2026-10-04. 49 unit tests pass. The manual matrix on a device (all granted; foreground only; denied; notifications denied) has not been run |
 | 7 | Geofencing | Code done 2026-10-04. 55 unit tests pass (station selection and refresh fence). Registration, enter/exit events and survival across a reboot have not been observed on a device |
-| 8 | Alert pipeline | Not started |
+| 8 | Alert pipeline | Code done 2026-10-04. 69 unit tests pass (state machine, coordinator, notification content). The notification itself, its sound and vibration channels, the tap-through and a real geofence entry have not been observed on a device. Debug builds have a "Test alert" button on the station screen to exercise the worker and notification without travelling |
 | 9 | Riding suppression and high accuracy mode | Not started |
 | 10 | Failure handling and quota | Not started |
 | 11 | Field test and tuning | Not started |
@@ -315,8 +315,11 @@ as written.
 - There are 109 stations and Android allows 100 geofences, so phase 7's
   nearest-90 selection is required even with every line monitored.
 - Parel/Prabhadevi (290 m), Lower Parel/Currey Road (346 m) and
-  Matunga/Matunga Road (367 m) sit inside each other's 500 m radius. Phase 8
-  must decide what one alert shows when two stations are entered together.
+  Matunga/Matunga Road (367 m) sit inside each other's 500 m radius. Decided in
+  phase 8: when both are entered in the same event, one alert is shown for the
+  closer station; when the second is entered later, its alert replaces the
+  first. Showing both stations in one alert is future work ("multiple nearby
+  station detection" in the spec).
 - The picked station is saved with the settings (done in phase 5).
 - A code shared by two lines cannot be split by line. With only Harbour
   monitored, Andheri still shows its Western trains, because both use `ADH`.
