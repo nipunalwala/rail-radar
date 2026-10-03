@@ -1,0 +1,292 @@
+{
+    "success":  true,
+    "data":  {
+                 "station":  {
+                                 "code":  "DR",
+                                 "name":  "Dadar",
+                                 "city":  "Mumbai",
+                                 "elevation_m":  7,
+                                 "lat":  19.01705,
+                                 "lng":  72.84303,
+                                 "stationType":  "station",
+                                 "popularity":  0,
+                                 "railwayLines":  "C",
+                                 "facilities":  [
+
+                                                ]
+                             },
+                 "trains":  [
+                                {
+                                    "train":  {
+                                                  "number":  "97439",
+                                                  "name":  "Mumbai CSMT - Thane Local",
+                                                  "type":  "EMU",
+                                                  "source":  {
+                                                                 "code":  "CSMT",
+                                                                 "name":  "Mumbai CSMT"
+                                                             },
+                                                  "destination":  {
+                                                                      "code":  "TNA",
+                                                                      "name":  "Thane"
+                                                                  },
+                                                  "runDays":  [
+                                                                  "mon",
+                                                                  "tue",
+                                                                  "wed",
+                                                                  "thu",
+                                                                  "fri",
+                                                                  "sat",
+                                                                  "sun"
+                                                              ]
+                                              },
+                                    "stop":  {
+                                                 "sequence":  8,
+                                                 "arrival":  "00:04",
+                                                 "departure":  "00:04",
+                                                 "arrivalDay":  2,
+                                                 "departureDay":  2,
+                                                 "distance":  8.9,
+                                                 "stopType":  "halt"
+                                             }
+                                },
+                                {
+                                    "train":  {
+                                                  "number":  "11003",
+                                                  "name":  "Tutari Express",
+                                                  "type":  "Mail/Express",
+                                                  "source":  {
+                                                                 "code":  "DR",
+                                                                 "name":  "Dadar"
+                                                             },
+                                                  "destination":  {
+                                                                      "code":  "SWV",
+                                                                      "name":  "Sawantwadi Road"
+                                                                  },
+                                                  "runDays":  [
+                                                                  "mon",
+                                                                  "tue",
+                                                                  "wed",
+                                                                  "thu",
+                                                                  "fri",
+                                                                  "sat",
+                                                                  "sun"
+                                                              ]
+                                              },
+                                    "stop":  {
+                                                 "sequence":  1,
+                                                 "arrival":  null,
+                                                 "departure":  "00:05",
+                                                 "arrivalDay":  null,
+                                                 "departureDay":  1,
+                                                 "distance":  0,
+                                                 "stopType":  "origin"
+                                             }
+                                },
+                                {
+                                    "train":  {
+                                                  "number":  "95748",
+                                                  "name":  "Kalyan - Mumbai CSMT Local",
+                                                  "type":  "EMU",
+                                                  "source":  {
+                                                                 "code":  "KYN",
+                                                                 "name":  "Kalyan Jn"
+                                                             },
+                                                  "destination":  {
+                                                                      "code":  "CSMT",
+                                                                      "name":  "Mumbai CSMT"
+                                                                  },
+                                                  "runDays":  [
+                                                                  "mon",
+                                                                  "tue",
+                                                                  "wed",
+                                                                  "thu",
+                                                                  "fri",
+                                                                  "sat"
+                                                              ]
+                                              },
+                                    "stop":  {
+                                                 "sequence":  18,
+                                                 "arrival":  "00:06",
+                                                 "departure":  "00:06",
+                                                 "arrivalDay":  2,
+                                                 "departureDay":  2,
+                                                 "distance":  44.3,
+                                                 "stopType":  "halt"
+                                             }
+                                },
+                                {
+                                    "train":  {
+                                                  "number":  "15087",
+                                                  "name":  "Sawantwadi Road Express",
+                                                  "type":  "Mail/Express",
+                                                  "source":  {
+                                                                 "code":  "CSMT",
+                                                                 "name":  "Mumbai CSMT"
+                                                             },
+                                                  "destination":  {
+                                                                      "code":  "SWV",
+                                                                      "name":  "Sawantwadi Road"
+                                                                  },
+                                                  "runDays":  [
+                                                                  "mon",
+                                                                  "tue",
+                                                                  "wed",
+                                                                  "thu",
+                                                                  "fri",
+                                                                  "sat",
+                                                                  "sun"
+                                                              ]
+                                              },
+                                    "stop":  {
+                                                 "sequence":  8,
+                                                 "arrival":  "00:07",
+                                                 "departure":  "00:10",
+                                                 "arrivalDay":  2,
+                                                 "departureDay":  2,
+                                                 "distance":  8.9,
+                                                 "stopType":  "halt"
+                                             }
+                                },
+                                {
+                                    "train":  {
+                                                  "number":  "97441",
+                                                  "name":  "Mumbai CSMT - Thane Local",
+                                                  "type":  "EMU",
+                                                  "source":  {
+                                                                 "code":  "CSMT",
+                                                                 "name":  "Mumbai CSMT"
+                                                             },
+                                                  "destination":  {
+                                                                      "code":  "TNA",
+                                                                      "name":  "Thane"
+                                                                  },
+                                                  "runDays":  [
+                                                                  "mon",
+                                                                  "tue",
+                                                                  "wed",
+                                                                  "thu",
+                                                                  "fri",
+                                                                  "sat",
+                                                                  "sun"
+                                                              ]
+                                              },
+                                    "stop":  {
+                                                 "sequence":  8,
+                                                 "arrival":  "00:13",
+                                                 "departure":  "00:13",
+                                                 "arrivalDay":  2,
+                                                 "departureDay":  2,
+                                                 "distance":  8.9,
+                                                 "stopType":  "halt"
+                                             }
+                                },
+                                {
+                                    "train":  {
+                                                  "number":  "97651",
+                                                  "name":  "Mumbai CSMT - Kurla Local",
+                                                  "type":  "EMU",
+                                                  "source":  {
+                                                                 "code":  "CSMT",
+                                                                 "name":  "Mumbai CSMT"
+                                                             },
+                                                  "destination":  {
+                                                                      "code":  "CLA",
+                                                                      "name":  "Kurla Jn"
+                                                                  },
+                                                  "runDays":  [
+                                                                  "mon",
+                                                                  "tue",
+                                                                  "wed",
+                                                                  "thu",
+                                                                  "fri",
+                                                                  "sat",
+                                                                  "sun"
+                                                              ]
+                                              },
+                                    "stop":  {
+                                                 "sequence":  8,
+                                                 "arrival":  "00:16",
+                                                 "departure":  "00:16",
+                                                 "arrivalDay":  2,
+                                                 "departureDay":  2,
+                                                 "distance":  8.9,
+                                                 "stopType":  "halt"
+                                             }
+                                },
+                                {
+                                    "train":  {
+                                                  "number":  "95337",
+                                                  "name":  "A1 Express",
+                                                  "type":  "EMU",
+                                                  "source":  {
+                                                                 "code":  "CSMT",
+                                                                 "name":  "Mumbai CSMT"
+                                                             },
+                                                  "destination":  {
+                                                                      "code":  "ABH",
+                                                                      "name":  "Ambarnath"
+                                                                  },
+                                                  "runDays":  [
+                                                                  "mon",
+                                                                  "tue",
+                                                                  "wed",
+                                                                  "thu",
+                                                                  "fri",
+                                                                  "sat",
+                                                                  "sun"
+                                                              ]
+                                              },
+                                    "stop":  {
+                                                 "sequence":  8,
+                                                 "arrival":  "00:20",
+                                                 "departure":  "00:20",
+                                                 "arrivalDay":  1,
+                                                 "departureDay":  1,
+                                                 "distance":  8.9,
+                                                 "stopType":  "halt"
+                                             }
+                                },
+                                {
+                                    "train":  {
+                                                  "number":  "01080",
+                                                  "name":  "Gorakhpur - Mumbai CSMT Special",
+                                                  "type":  "Mail/Express",
+                                                  "source":  {
+                                                                 "code":  "GKP",
+                                                                 "name":  "Gorakhpur Jn"
+                                                             },
+                                                  "destination":  {
+                                                                      "code":  "CSMT",
+                                                                      "name":  "Mumbai CSMT"
+                                                                  },
+                                                  "runDays":  [
+                                                                  "mon",
+                                                                  "tue",
+                                                                  "wed",
+                                                                  "thu",
+                                                                  "fri",
+                                                                  "sat",
+                                                                  "sun"
+                                                              ]
+                                              },
+                                    "stop":  {
+                                                 "sequence":  235,
+                                                 "arrival":  "00:17",
+                                                 "departure":  "00:20",
+                                                 "arrivalDay":  3,
+                                                 "departureDay":  3,
+                                                 "distance":  1684.1,
+                                                 "stopType":  "halt"
+                                             }
+                                }
+                            ],
+                 "count":  598,
+                 "includeIntermediate":  false
+             },
+    "meta":  {
+                 "timestamp":  "2026-10-03T23:01:56+05:30",
+                 "traceId":  "ef4fc81d-90af-42bb-b4d5-f16643e46d42",
+                 "source":  "database",
+                 "executionTime":  18
+             }
+}
